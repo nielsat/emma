@@ -1,0 +1,172 @@
+﻿@model MailPusher.Models.Publisher
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Publisher - @Model.Name</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="backToPublishers"><i class="fa fa-backward"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="row" style="font-weight:bold">
+                <div class="col-md-3">Domain</div>
+                <div class="col-md-3">@Model.Domain</div>
+                <div class="col-md-3">Language</div>
+                <div class="col-md-3">@Model.Language</div>
+            </div>
+            <div class="row" style="font-weight:bold">
+                <div class="col-md-3">Category</div>
+                <div class="col-md-3">@Model.Category</div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="publisherEmails">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    @Model.Name emails
+                </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="backToPublishers"><i class="fa fa-backward"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="datatable-checkbox_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="myTable" class="table table-striped table-bordered dataTable no-footer table-hover"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("Custom/SingleEmail")
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').dataTable({
+                serverSide: true,
+                ajax:{
+                    url:'@Url.Action("Get", "Email")',
+                    data: function ( d ) {
+                        d.publisherID =@Model.ID;
+                        if(!!$("#emailMinDate").length && !!$("#emailMaxDate").length){
+                            d.from = $("#emailMinDate").data('datepicker').getFormattedDate('mm-dd-yyyy');
+                            d.to = $("#emailMaxDate").data('datepicker').getFormattedDate('mm-dd-yyyy');
+                        }else{
+                            d.from=null;
+                            d.to=null;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        name: 'subjectLine',
+                        data: 'subjectLine',
+                        title: "Subject",
+                        sortable: true,
+                        searchable: true
+                    },
+                    {
+                        name: 'id',
+                        data: "id",
+                        title: "ID",
+                        sortable: true,
+                        searchable: false,
+                        visible: false,
+                    },
+                    {
+                        name: 'senderAddress',
+                        data: "senderAddress",
+                        title: "Sender Address",
+                        sortable: true,
+                        searchable: false,
+                        visible: false,
+                    },
+                    {
+                        name: 'copy',
+                        data: "copy",
+                        title: "Copy",
+                        sortable: true,
+                        searchable: false,
+                        visible: false,
+                    },
+                    {
+                        name: 'receivedGMT',
+                        data: "receivedGMT",
+                        title: "Sent",
+                        sortable: true,
+                        searchable: false
+                    },
+                    {
+                        name: null,
+                        data: null,
+                        title: '',
+                        sortable: false,
+                        searchable: false,
+                        defaultContent: "<a class='detailsBtn' href='#'><i class='fa fa-info'></i> Details</a>"
+                    }
+                ]
+            });
+            $('#myTable').on('draw.dt', function () {
+                initButtons();
+            });
+
+            function initButtons() {
+                var table = $('#myTable').DataTable();
+
+                $(".detailsBtn").click(function () {
+                    var rowData =table.row($(this).parents('tr')).data();
+                    initSingleEmail(rowData,'@Url.Action("GetEmailBody", "Email")');
+                    $("#publisherEmails").hide();
+                });
+
+                addCustomFilters()
+            }
+            $("#backToEmailsView").click(function(){
+                $("#publisherEmails").show();
+                hideSingleEmail();
+            });
+            $(".backToPublishers").click(function(){
+                window.location.href = '@Url.Action("index","publisher")';
+            });
+
+            function addCustomFilters()
+            {
+                if(!!$("#emailMinDate").length)
+                {
+                    return;
+                };
+                var emailRange = '<label > From: <input type="text" id="emailMinDate" class="form-control input-sm"/></label> &nbsp;';
+                emailRange += '<label > To: <input type="text" id="emailMaxDate" class="form-control input-sm"/></label> &nbsp;';
+                $("#myTable_filter").prepend(emailRange);
+                $("#emailMinDate").datepicker();
+                $("#emailMaxDate").datepicker();
+                $('#emailMinDate').change(function(){
+                    $('#myTable').DataTable().draw();
+                });
+                $('#emailMaxDate').change(function(){
+                    $('#myTable').DataTable().draw();
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,106 @@
+Received: from waveaccess.ru (mail.waveaccess.ru [87.249.45.134])
+	by emma.com with ESMTP
+	; Wed, 1 Mar 2017 23:55:36 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=waveaccess.ru;
+	s=MDaemon; t=1488441207; x=1489046007;
+	i=Aleksandr.Cherednichenko@waveaccess.ru; q=dns/txt; h=From:To:
+	Subject:Date:Message-ID:MIME-Version:Content-Type:Thread-Index:
+	Content-Language; bh=WeRpAKUhPN2XI4z0oMPD21t7eI0dLt2Dn0o2pMaU9eQ
+	=; b=jb4ozuZfPDyPGMWxsH6IdaBRulbhWsYoPXfBC9uyqvFvwX/PDc+aaaYesfb
+	dAQeWoytEOYRlnwDnir9sTH+5OmUGjdZFihpnWZtA5iq1tP9MmpZK6a+x4QMmtt0
+	XOZrJL3NMFNJUTnldZ+IN4+hnfddhlxfpTRtb0d2P7f0gleU=
+Received: from Cherednichenko by waveaccess.ru (MDaemon PRO v16.0.2 trial) 
+	with ESMTPA id md50017306920.msg for <admin@88.99.91.117>;
+	Thu, 02 Mar 2017 10:53:26 +0300
+X-Spam-Processed: waveaccess.ru, Thu, 02 Mar 2017 10:53:26 +0300
+	(not processed: message from trusted or authenticated source)
+X-MDRemoteIP: 87.249.45.135
+X-MDHelo: Cherednichenko
+X-MDArrival-Date: Thu, 02 Mar 2017 10:53:26 +0300
+X-Authenticated-Sender: Aleksandr.Cherednichenko@waveaccess.ru
+X-Return-Path: Aleksandr.Cherednichenko@waveaccess.ru
+X-Envelope-From: Aleksandr.Cherednichenko@waveaccess.ru
+X-MDaemon-Deliver-To: admin@88.99.91.117
+From: "Aleksandr Cherednichenko" <Aleksandr.Cherednichenko@waveaccess.ru>
+To: <admin@88.99.91.117>
+Subject: test
+Date: Thu, 2 Mar 2017 10:55:34 +0300
+Message-ID: <049b01d2932a$5f6045a0$1e20d0e0$@waveaccess.ru>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_049C_01D29343.84B10010"
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AdKTKl1wMdMC2O/OQ5Sx1/9NzmkIiQ==
+Content-Language: en-us
+
+This is a multipart message in MIME format.
+
+------=_NextPart_000_049C_01D29343.84B10010
+Content-Type: text/plain;
+	charset="koi8-r"
+Content-Transfer-Encoding: base64
+
+dGVzdA0KDQogDQoNCvMg1dfB1sXOycXNLA0KDQr+xdLFxM7J3sXOy88g4czFy9PBzsTSLg0KDQog
+DQoNCg==
+
+------=_NextPart_000_049C_01D29343.84B10010
+Content-Type: text/html;
+	charset="koi8-r"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
+xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
+xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
+xmlns=3D"http://www.w3.org/TR/REC-html40"><head><meta =
+http-equiv=3DContent-Type content=3D"text/html; charset=3Dkoi8-r"><meta =
+name=3DGenerator content=3D"Microsoft Word 15 (filtered =
+medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:56.7pt 42.5pt 56.7pt 85.05pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US =
+link=3D"#0563C1" vlink=3D"#954F72"><div class=3DWordSection1><p =
+class=3DMsoNormal>test<o:p></o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p><p class=3DMsoNormal><span =
+lang=3DRU>=F3 =D5=D7=C1=D6=C5=CE=C9=C5=CD,<o:p></o:p></span></p><p =
+class=3DMsoNormal><span lang=3DRU>=FE=C5=D2=C5=C4=CE=C9=DE=C5=CE=CB=CF =
+=E1=CC=C5=CB=D3=C1=CE=C4=D2.<o:p></o:p></span></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p></div></body></html>
+------=_NextPart_000_049C_01D29343.84B10010--
+

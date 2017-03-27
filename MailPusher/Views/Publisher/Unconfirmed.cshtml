@@ -1,0 +1,54 @@
+﻿@model MailPusher.Models.Email
+<input type="hidden" id="publisherId" />
+@Html.Partial("Custom/PublisherEmailFilter", Model)
+@Html.Partial("Custom/SingleEmail")
+<div class="form-group">
+    <div class="col-md-9">
+        <button class="btn btn-success" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Confirmed')">
+            I have now confirmed the publisher's newsletter
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_ConfirmNotFound')">
+            I couldn't find where to confirm
+        </button>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            updateEmailData(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)));
+        });
+
+        function updateEmailData(data){
+            $("#publisherId").val(data.PublisherID);
+            initSingleEmail(mapSingleEmailData(data),
+                '@Url.Action("GetEmailBody", "Email")');
+        }
+
+        function ChangePublisherStatus(newStatus) {
+            $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": "@Model.PublisherID" }).done(function (result) {
+                alert(result);
+            });
+        }
+        function mapSingleEmailData(data){
+            return { "senderAddress":data.SenderAddress,
+                "receivedGMT":data.ReceivedGMT,
+                "subjectLine": data.SubjectLine,
+                "id":data.ID};
+        }
+
+        InitPublisherFilter(
+            {
+                'onPublisherChanged': function (data) { updateEmailData(data); },
+                'getFirstUrl': '@Url.Action("GetFirstPublisherEmail", "Email")',
+                'getNextUrl': '@Url.Action("GetNextPublisherEmail", "Email")',
+                'getPrevUrl': '@Url.Action("GetPrevPublisherEmail", "Email")',
+                'extendRequestParams': function (data) {
+                    data.status = @((int)MailPusher.Common.Enums.PublisherStatus.Subscribed);
+                    data.publisherId = $("#publisherId").val();
+                    return data;
+                }
+            });
+    </script>
+    }

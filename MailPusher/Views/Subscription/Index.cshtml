@@ -1,0 +1,114 @@
+﻿@model MailPusher.Models.PublisherEmail
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="title_left">
+    <h3>Here is the information for the publisher we need to subscribe:</h3>
+</div>
+
+@Html.Partial("Custom/PublisherEmailFilter", Model)
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Publisher: <label id="publisherName"></label> </h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="form-horizontal form-label-left">
+            <input type="hidden" id="publisherId" />
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Website</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <label class="control-label col-md-9 col-sm-9 col-xs-12" style="text-align:left; margin-left:0px; padding-left:0px">
+                        <a target="_blank" id="publisherDomain"></a>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                    E-mail address to subscribe with
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="text" readonly="readonly" class="form-control col-md-6 col-xs-12" id="publisherEmail" />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary" type="button" onclick="CopyToClipboard('emailInput')">Copy to clipboard</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-9">
+                    <button class="btn btn-success" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Subscribed')">
+                        I have now subscribed to publisher's newsletter
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_SubscriptionNotFound')">
+                        I couldn't find where to subscribe
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-9">
+                    <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_NotAllowedToSubscribe')">
+                        The website did not allow me to subscribe
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-9">
+                    <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_DoesNotExist')">
+                        The website does not exist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        InitPublisherFilter(
+            {
+                'onPublisherChanged': function (data) { InitPublisher(data); },
+                'getFirstUrl': '@Url.Action("GetFirstPublisher", "Subscription")',
+                'getNextUrl': '@Url.Action("GetNextPublisher", "Subscription")',
+                'getPrevUrl': '@Url.Action("GetPrevPublisher", "Subscription")',
+                'extendRequestParams': function (data) {
+                    data.status = @((int)MailPusher.Common.Enums.PublisherStatus.None);
+                    data.publisherId = $("#publisherId").val();
+                    return data;
+                }
+            });
+        function ChangePublisherStatus(newStatus) {
+            $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": $("#publisherId").val() }).done(function (result) {
+                alert(result);
+            });
+        }
+        function CopyToClipboard(inputId) {
+            SelectText(inputId);
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+            } catch (err) {
+                console.log('Oops, unable to copy');
+            }
+        }
+        function SelectText(inputId) {
+            document.getElementById(inputId).select();
+        }
+
+        function InitPublisher(publisher) {
+            $("#publisherName").html(publisher.PublisherName);
+            $("#publisherDomain").text(publisher.Domain);
+            $("#publisherDomain").attr("href", publisher.Domain)
+            $("#publisherEmail").val(publisher.SubscriberEmail)
+            $("#publisherId").val(publisher.PublisherId);
+        }
+
+        InitPublisher(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)))
+    </script>
+    }
+
