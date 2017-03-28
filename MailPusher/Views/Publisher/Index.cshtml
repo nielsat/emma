@@ -114,7 +114,7 @@
                 var combinedStatus = 0;
                 if(!$('#publisherStatus').length)
                 {
-                    var urlParameter = getUrlParameter('publisherStatuses');
+                    var urlParameter = GetURLParamPublisherStatuses();
                     if(!!urlParameter)
                     {
                         combinedStatus = urlParameter;
@@ -127,9 +127,17 @@
                 return combinedStatus;
             }
 
+            function GetURLParamPublisherStatuses(){
+                return getUrlParameter('publisherStatuses');
+            }
+
+            function GetURLParamIsPotentiallyCancelled(){
+                return getUrlParameter('isPotentiallyCancelled')
+            }
+
             function IsPotentiallyCancelled()
             {
-                var urlParameter = getUrlParameter('isPotentiallyCancelled');
+                var urlParameter = GetURLParamIsPotentiallyCancelled();
                 return !!urlParameter;
             }
 
@@ -155,6 +163,20 @@
                 $("#publisherStatus").change(function(){
                     $('#myTable').DataTable().draw();
                 })
+            }
+            FixNavigation();
+
+            function FixNavigation(){
+                if(!!GetURLParamPublisherStatuses())
+                {
+                    $("#faildSubscriptionsMenuItem").addClass("current-page");
+                    $("#publisherMenuItem").removeClass("current-page");
+                }
+                if(!!IsPotentiallyCancelled())
+                {
+                    $("#potentiallyCancelledSubscriptionsMenuItem").addClass("current-page");
+                    $("#publisherMenuItem").removeClass("current-page");
+                }
             }
         });
     </script>

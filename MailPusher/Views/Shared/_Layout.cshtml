@@ -41,7 +41,7 @@
                                 <li>
                                     <a href='@Url.Action("Index","Home")'><i class="fa fa-home"></i> Home </a>
                                 </li>
-                                <li>
+                                <li id="publisherMenuItem">
                                     <a href='@Url.Action("Index", "Publisher")'><i class="fa fa-search"></i> Publishers</a>
                                 </li>
                                 <li>
@@ -50,14 +50,14 @@
                                 <li>
                                     <a href='@Url.Action("Unconfirmed", "Publisher")'><i class="fa fa-question-circle"></i> Unconfirmed Subscriptions</a>
                                 </li>
-                                <li>
+                                <li id="faildSubscriptionsMenuItem">
                                     <a href='@(Url.Action("Index", "Publisher")+"?publisherStatuses="+ 
                                         (MailPusher.Common.Enums.PublisherStatus.Error_ConfirmNotFound
                                         |MailPusher.Common.Enums.PublisherStatus.Error_DoesNotExist
                                         |MailPusher.Common.Enums.PublisherStatus.Error_NotAllowedToSubscribe
                                         |MailPusher.Common.Enums.PublisherStatus.Error_SubscriptionNotFound).ToString())'><i class="fa fa-exclamation-circle"></i> Faild Subscriptions</a>
                                 </li>
-                                <li>
+                                <li id="potentiallyCancelledSubscriptionsMenuItem">
                                     <a href='@(Url.Action("Index", "Publisher")+"?isPotentiallyCancelled=true")'><i class="fa fa-trash"></i> Potentially Cancelled Subscriptions</a>
                                 </li>
                             </ul>
