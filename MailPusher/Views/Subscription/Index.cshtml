@@ -85,6 +85,9 @@
         function ChangePublisherStatus(newStatus) {
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": $("#publisherId").val() }).done(function (result) {
                 alert(result);
+                if(!isSpecificPublisherState()){
+                    GetFirstByFilter();
+                };
             });
         }
         function CopyToClipboard(inputId) {
@@ -111,11 +114,15 @@
         InitPublisher(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)))
 
         $(document).ready(function(){
-            if(!!getUrlParameter("publisherId"))
-            {
+            if(isSpecificPublisherState()) {
                 HidePublisherFilter();
-            }
+            };
         });
+
+        function isSpecificPublisherState()
+        {
+            return !!getUrlParameter("publisherId");
+        }
     </script>
     }
 

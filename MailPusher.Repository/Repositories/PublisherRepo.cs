@@ -113,7 +113,12 @@ namespace MailPusher.Repository.Repositories
             Publisher result = new Publisher();
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
-                result = context.Publishers.Include(x => x.NACE).FirstOrDefault(x => x.Language == countryCode&& x.Status==status);
+                var query = context.Publishers.Include(x => x.NACE);
+                if (!string.IsNullOrEmpty(countryCode))
+                {
+                    query = query.Where(x => x.Language == countryCode);
+                }
+                result = query.FirstOrDefault(x => x.Status == status);
             }
             return result;
         }
@@ -133,7 +138,13 @@ namespace MailPusher.Repository.Repositories
                 {
                     query = query.Where(x => x.ID < publisherId);
                 }
-                result = query.FirstOrDefault(x => x.Language == countryCode && x.Status == status);
+
+                if (!string.IsNullOrEmpty(countryCode))
+                {
+                    query = query.Where(x => x.Language == countryCode);
+                }
+
+                result = query.FirstOrDefault(x => x.Status == status);
             }
             return result;
         }

@@ -11,26 +11,6 @@ function InitPublisherFilter(settings) {
     InitFilterButtons();
 }
 
-
-function GetFilteredData(url) {
-    var requestData = GetFliterRequestData();
-    if (requestData) {
-        $.get(url, requestData).done(function (data) {
-            filterSettings.onPublisherChanged(data);
-        });
-    }
-}
-function GetFliterRequestData() {
-    var countryCode = GetCountryCode($("#countryList").val());
-    if (countryCode == '') {
-        alert('Please select country!');
-        return null;
-    }
-    var requestParams = { 'countryCode': countryCode};
-    return filterSettings.extendRequestParams(requestParams);
-    //{ 'countryCode': countryCode, 'publisherId': publisherId, 'status': filterSettings.defaultFilterStatus };
-}
-
 function InitFilterButtons() {
     $(".getNext").click(function () {
         GetFilteredData(filterSettings.getNextUrl);
@@ -42,6 +22,25 @@ function InitFilterButtons() {
         GetFilteredData(filterSettings.getFirstUrl);
     });
     initCountryTypeahead("countryList");
+}
+
+function GetFilteredData(url) {
+    var requestData = GetFliterRequestData();
+    if (requestData) {
+        $.get(url, requestData).done(function (data) {
+            filterSettings.onPublisherChanged(data);
+        });
+    }
+}
+
+function GetFliterRequestData() {
+    var countryCode = GetCountryCode($("#countryList").val());
+    var requestParams = { 'countryCode': countryCode };
+    return filterSettings.extendRequestParams(requestParams);
+}
+
+function GetFirstByFilter() {
+    GetFilteredData(filterSettings.getFirstUrl);
 }
 
 function HidePublisherFilter() {
