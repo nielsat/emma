@@ -33,7 +33,7 @@
                     <input type="text" readonly="readonly" class="form-control col-md-6 col-xs-12" id="publisherEmail" />
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-primary" type="button" onclick="CopyToClipboard('emailInput')">Copy to clipboard</button>
+                    <button class="btn btn-primary" type="button" onclick="CopyToClipboard('publisherEmail')">Copy to clipboard</button>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
 
 @section Scripts{
     <script type="text/javascript">
-        InitPublisherFilter(
+        publisherFilter.init(
             {
                 'onPublisherChanged': function (data) { InitPublisher(data); },
                 'getFirstUrl': '@Url.Action("GetFirstPublisher", "Subscription")',
@@ -86,7 +86,7 @@
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": $("#publisherId").val() }).done(function (result) {
                 alert(result);
                 if(!isSpecificPublisherState()){
-                    GetFirstByFilter();
+                    publisherFilter.getFirst();
                 };
             });
         }
@@ -98,9 +98,10 @@
             } catch (err) {
                 console.log('Oops, unable to copy');
             }
-        }
-        function SelectText(inputId) {
-            document.getElementById(inputId).select();
+
+            function SelectText(inputId) {
+                document.getElementById(inputId).select();
+            }
         }
 
         function InitPublisher(publisher) {
@@ -115,7 +116,7 @@
 
         $(document).ready(function(){
             if(isSpecificPublisherState()) {
-                HidePublisherFilter();
+                publisherFilter.hide();
             };
         });
 

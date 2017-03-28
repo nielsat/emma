@@ -126,22 +126,36 @@ namespace MailPusher.Repository.Repositories
             Email result = new Email();
             using (var context = new MailPusherDBContext())
             {
-                result = (from p in context.Publishers
-                          join e in context.Emails on p.ID equals e.PublisherID
-                          where p.Status == status && p.Language == countryCode
-                          select e).FirstOrDefault();
+                result = GenerateQueryForEmailByPublisherCountryAndStatus(context, countryCode, status, null, 0).FirstOrDefault();
             }
             return result;
+        }
+
+        private IQueryable<Email> GenerateQueryForEmailByPublisherCountryAndStatus(MailPusherDBContext context, string countryCode, PublisherStatus status, int? publisherId, Direction direction) {
+            var query = context.Publishers.Where(x => x.Status == status);
+            if (!string.IsNullOrEmpty(countryCode))
+            {
+                query = query.Where(x => x.Language == countryCode);
+            }
+            if (publisherId.HasValue)
+            {
+                if (direction == Direction.Next)
+                {
+                    query = query.Where(x => x.ID > publisherId.Value);
+                }
+                if (direction == Direction.Previous)
+                {
+                    query = query.Where(x => x.ID < publisherId.Value);
+                }
+            }
+            return query.Join(context.Emails, pub => pub.ID, em => em.PublisherID, (pub, em) => em);
         }
         public Email GetNextEmailByPublisherCountryAndStatus(string countryCode, PublisherStatus status, int publisherId)
         {
             Email result = new Email();
             using (var context = new MailPusherDBContext())
             {
-                result = (from p in context.Publishers
-                          join e in context.Emails on p.ID equals e.PublisherID
-                          where p.Status == status && p.Language == countryCode && p.ID>publisherId
-                          select e).FirstOrDefault();
+                result = GenerateQueryForEmailByPublisherCountryAndStatus(context, countryCode, status, publisherId, Direction.Next).FirstOrDefault(); 
             }
             return result;
         }
@@ -151,10 +165,7 @@ namespace MailPusher.Repository.Repositories
             Email result = new Email();
             using (var context = new MailPusherDBContext())
             {
-                result = (from p in context.Publishers
-                          join e in context.Emails on p.ID equals e.PublisherID
-                          where p.Status == status && p.Language == countryCode && p.ID<publisherId
-                          select e).FirstOrDefault();
+                result = GenerateQueryForEmailByPublisherCountryAndStatus(context, countryCode, status, publisherId, Direction.Previous).FirstOrDefault();
             }
             return result;
         }

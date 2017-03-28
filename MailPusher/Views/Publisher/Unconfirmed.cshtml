@@ -27,8 +27,9 @@
         }
 
         function ChangePublisherStatus(newStatus) {
-            $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": "@Model.PublisherID" }).done(function (result) {
+            $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id":  $("#publisherId").val() }).done(function (result) {
                 alert(result);
+                publisherFilter.getFirst();
             });
         }
         function mapSingleEmailData(data){
@@ -38,7 +39,7 @@
                 "id":data.ID};
         }
 
-        InitPublisherFilter(
+        publisherFilter.init(
             {
                 'onPublisherChanged': function (data) { updateEmailData(data); },
                 'getFirstUrl': '@Url.Action("GetFirstPublisherEmail", "Email")',
