@@ -414,6 +414,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap3-typeahead.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
+    <Content Include="Scripts\common\baseHelper.js" />
     <Content Include="Scripts\common\countriesHelper.js" />
     <Content Include="Scripts\common\emailHelper.js" />
     <Content Include="Scripts\common\publisherHelper.js" />

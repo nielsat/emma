@@ -43,3 +43,7 @@ function InitFilterButtons() {
     });
     initCountryTypeahead("countryList");
 }
+
+function HidePublisherFilter() {
+    $("#publisherEmailFilterPanel").hide();
+}

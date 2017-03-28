@@ -109,6 +109,13 @@
         }
 
         InitPublisher(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)))
+
+        $(document).ready(function(){
+            if(!!getUrlParameter("publisherId"))
+            {
+                HidePublisherFilter();
+            }
+        });
     </script>
     }
 
