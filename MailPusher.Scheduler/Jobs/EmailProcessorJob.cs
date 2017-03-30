@@ -27,25 +27,32 @@ namespace MailPusher.Scheduler.Jobs
                 PublisherRepo publisherRepo = new PublisherRepo();
                 foreach (var email in emailFiles)
                 {
-                    CDO.Message message = ReadMessage(email);
-
-                    int publisherId = GetPublisherIdFromEmail(message.To);
-                    string emailHTML = ChangeImgSrcToLocal(message.HTMLBody, settings, publisherId);
-                    repo.AddEmail(new Common.Models.Email()
+                    try
                     {
-                        EmailHeaders = GetEmailHeaders(message),
-                        HTML = emailHTML,
-                        HTMLText = emailHTML,
-                        ReceivedGMT = message.ReceivedTime,
-                        SenderAddress = message.From,
-                        SenderName = message.Sender,
-                        SubjectLine = message.Subject,
-                        Text = message.TextBody,
-                        PublisherID = publisherId,
-                        Copy = message.CC
-                    });
-                    File.Delete(email);
-                    publisherRepo.UpdateLastReceivedEmailDate(publisherId);
+                        CDO.Message message = ReadMessage(email);
+
+                        int publisherId = GetPublisherIdFromEmail(message.To);
+                        string emailHTML = ChangeImgSrcToLocal(message.HTMLBody, settings, publisherId);
+                        repo.AddEmail(new Common.Models.Email()
+                        {
+                            EmailHeaders = GetEmailHeaders(message),
+                            HTML = emailHTML,
+                            HTMLText = emailHTML,
+                            ReceivedGMT = message.ReceivedTime,
+                            SenderAddress = message.From,
+                            SenderName = message.Sender,
+                            SubjectLine = message.Subject,
+                            Text = message.TextBody,
+                            PublisherID = publisherId,
+                            Copy = message.CC
+                        });
+                        File.Delete(email);
+                        publisherRepo.UpdateLastReceivedEmailDate(publisherId);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                    }
                 }
             }
             catch (Exception ex)
@@ -61,8 +68,8 @@ namespace MailPusher.Scheduler.Jobs
             foreach (dynamic item in message.Fields)
             {
                 result.Add(new Common.Models.EmailHeader() {
-                    HeaderName = item.Name,
-                    HeaderValue = item.Value.ToString()
+                    HeaderName = item.Name==null?"":item.Name,
+                    HeaderValue = item.Value==null?"":item.Value.ToString()
                 });
             }
             return result;
