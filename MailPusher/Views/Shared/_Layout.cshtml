@@ -12,6 +12,8 @@
 <body class="nav-md">
     <div class="container body">
         <div class="main_container">
+@if (Context.User.Identity.IsAuthenticated)
+{
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
@@ -21,25 +23,25 @@
                     <div class="clearfix"></div>
 
                     @*<!-- menu profile quick info -->
-                    <div class="profile clearfix">
-                        <div class="profile_pic">
-                            <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                            </div>
+                            <div class="profile_info">
+                                <span>Welcome,</span>
+                                <h2>John Doe</h2>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <span>Welcome,</span>
-                            <h2>John Doe</h2>
-                        </div>
-                    </div>
-                    <!-- /menu profile quick info -->
+                        <!-- /menu profile quick info -->
 
-                    <br>*@
+                        <br>*@
 
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section active">
                             <ul class="nav side-menu" style="">
                                 <li>
-                                    <a href='@Url.Action("Index","Home")'><i class="fa fa-home"></i> Home </a>
+                                    <a href='@Url.Action("Index", "Home")'><i class="fa fa-home"></i> Home </a>
                                 </li>
                                 <li id="publisherMenuItem">
                                     <a href='@Url.Action("Index", "Publisher")'><i class="fa fa-search"></i> Publishers</a>
@@ -51,14 +53,14 @@
                                     <a href='@Url.Action("Unconfirmed", "Publisher")'><i class="fa fa-question-circle"></i> Unconfirmed Subscriptions</a>
                                 </li>
                                 <li id="faildSubscriptionsMenuItem">
-                                    <a href='@(Url.Action("Index", "Publisher")+"?publisherStatuses="+ 
-                                        (MailPusher.Common.Enums.PublisherStatus.Error_ConfirmNotFound
-                                        |MailPusher.Common.Enums.PublisherStatus.Error_DoesNotExist
-                                        |MailPusher.Common.Enums.PublisherStatus.Error_NotAllowedToSubscribe
-                                        |MailPusher.Common.Enums.PublisherStatus.Error_SubscriptionNotFound).ToString())'><i class="fa fa-exclamation-circle"></i> Faild Subscriptions</a>
+                                    <a href='@(Url.Action("Index", "Publisher") + "?publisherStatuses=" +
+                                      (MailPusher.Common.Enums.PublisherStatus.Error_ConfirmNotFound
+                                      | MailPusher.Common.Enums.PublisherStatus.Error_DoesNotExist
+                                      | MailPusher.Common.Enums.PublisherStatus.Error_NotAllowedToSubscribe
+                                      | MailPusher.Common.Enums.PublisherStatus.Error_SubscriptionNotFound).ToString())'><i class="fa fa-exclamation-circle"></i>Faild Subscriptions</a>
                                 </li>
                                 <li id="potentiallyCancelledSubscriptionsMenuItem">
-                                    <a href='@(Url.Action("Index", "Publisher")+"?isPotentiallyCancelled=true")'><i class="fa fa-trash"></i> Potentially Cancelled Subscriptions</a>
+                                    <a href='@(Url.Action("Index", "Publisher") + "?isPotentiallyCancelled=true")'><i class="fa fa-trash"></i> Potentially Cancelled Subscriptions</a>
                                 </li>
                             </ul>
                         </div>
@@ -75,13 +77,15 @@
                         <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="" href="@Url.Action("LogOut","Account")" data-original-title="Logout">
+                        <a data-toggle="tooltip" data-placement="top" title="" href="@Url.Action("LogOut", "Account")" data-original-title="Logout">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
                     <!-- /menu footer buttons -->
+
                 </div>
             </div>
+
             <div class="top_nav">
                 <div class="nav_menu">
                     <nav>
@@ -96,13 +100,14 @@
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li><a href="@Url.Action("LogOut","Account")"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    <li><a href="@Url.Action("LogOut", "Account")"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                                 </ul>
-                            </li>   
+                            </li>
                         </ul>
                     </nav>
                 </div>
             </div>
+}
             <div class="right_col" role="main" style="min-height: 1657px;">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
