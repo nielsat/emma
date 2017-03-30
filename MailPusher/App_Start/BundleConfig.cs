@@ -29,7 +29,8 @@ namespace MailPusher
                       "~/Scripts/bootstrap-multiselect.js",
                       "~/Scripts/bootstrap3-typeahead*",
                       "~/Scripts/bootstrap-datepicker*",
-                      "~/Scripts/locales/bootstrap-datepicker*"));
+                      "~/Scripts/locales/bootstrap-datepicker*",
+                      "~/Scripts/bootstrap-notify*"));
 
             bundles.Add(new ScriptBundle("~/bundles/mailPusher").Include(
                       "~/Scripts/common/*.js"));

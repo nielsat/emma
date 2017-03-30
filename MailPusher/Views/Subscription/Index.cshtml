@@ -84,10 +84,17 @@
             });
         function ChangePublisherStatus(newStatus) {
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": $("#publisherId").val() }).done(function (result) {
-                alert(result);
-                if(!isSpecificPublisherState()){
-                    publisherFilter.getFirst();
-                };
+                if(result===true)
+                {
+                    $.notify('Successfully changed publisher state to ' + newStatus, 
+                        {
+                            type: 'success',
+                            placement:{align:'center'}
+                        });
+                    if(!isSpecificPublisherState()){
+                        publisherFilter.getFirst();
+                    };
+                }
             });
         }
         function CopyToClipboard(inputId) {

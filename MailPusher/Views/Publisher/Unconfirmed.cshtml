@@ -28,8 +28,15 @@
 
         function ChangePublisherStatus(newStatus) {
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id":  $("#publisherId").val() }).done(function (result) {
-                alert(result);
-                publisherFilter.getFirst();
+                if(result===true)
+                {
+                    $.notify('Successfully changed publisher state to ' + newStatus, 
+                        {
+                            type: 'success',
+                            placement:{align:'center'}
+                        });
+                    publisherFilter.getFirst();
+                }
             });
         }
         function mapSingleEmailData(data){
