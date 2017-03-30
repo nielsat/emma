@@ -623,6 +623,7 @@
     <Content Include="Views\Shared\Custom\SingleEmail.cshtml" />
     <Content Include="Views\Publisher\Unconfirmed.cshtml" />
     <Content Include="Views\Shared\Custom\PublisherEmailFilter.cshtml" />
+    <Content Include="Views\Publisher\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

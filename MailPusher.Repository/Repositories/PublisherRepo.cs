@@ -74,6 +74,31 @@ namespace MailPusher.Repository.Repositories
             return result;
         }
 
+        public Publisher Update(Publisher publisher)
+        {
+            Publisher result = new Publisher(); 
+            using (MailPusherDBContext context = new MailPusherDBContext())
+            {
+                Publisher dbPublisher = context.Publishers.Include(x=>x.NACE).FirstOrDefault(x => x.ID == publisher.ID);
+                if (dbPublisher != null)
+                {
+                    dbPublisher.Domain = publisher.Domain;
+                    dbPublisher.Status = publisher.Status;
+                    dbPublisher.Language = publisher.Language;
+                    dbPublisher.NACEID = publisher.NACEID;
+                    dbPublisher.Name = publisher.Name;
+
+                    dbPublisher.Updater = publisher.Updater;
+                }
+                
+                context.Entry(dbPublisher).State = EntityState.Modified;
+                context.SaveChanges();
+
+                result = dbPublisher;
+            }
+            return result;
+        }
+
         public bool ChangePublisherStatus(PublisherStatus status, int id, string userId)
         {
             using (MailPusherDBContext context = new MailPusherDBContext())

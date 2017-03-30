@@ -56,6 +56,13 @@ namespace MailPusher.Helpers
             return Map(dbPublisher);
         }
 
+        public Publisher Update(Publisher publisher)
+        {
+            PublisherRepo repo = new PublisherRepo();
+            Repository.Models.Publisher dbPublisher = repo.Update(Map(publisher));
+            return Map(dbPublisher);
+        }
+
         public List<Publisher> Map(List<Repository.Models.Publisher> sourcePublishers)
         {
             List<Publisher> result = new List<Publisher>();

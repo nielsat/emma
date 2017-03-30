@@ -49,8 +49,7 @@ namespace MailPusher.Controllers
 
         public ActionResult Create()
         {
-            NACEHelper helper = new NACEHelper();
-            ViewBag.NACEs = helper.GetAll();
+            InitLists();
             return View();
         }
 
@@ -74,6 +73,23 @@ namespace MailPusher.Controllers
             return Content("ok");
         }
 
+        public ActionResult Edit(int publisherID)
+        {
+            InitLists();
+            PublisherHelper helper = new PublisherHelper();
+            return View(helper.GetPublisher(publisherID));
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Publisher publisher)
+        {
+            InitLists();
+            PublisherHelper helper = new PublisherHelper();
+            publisher.UpdaterId = User.Identity.GetUserId();
+            helper.Update(publisher);
+            return Content("ok");
+        }
+
         [HttpPost]
         public ActionResult ChangePublisherStatus(PublisherStatus status, int id)
         {
@@ -86,6 +102,11 @@ namespace MailPusher.Controllers
         {
             EmailHelper helper = new EmailHelper();
             return View(helper.GetFirstPublisherEmail(PublisherStatus.Subscribed));
+        }
+
+        private void InitLists() {
+            NACEHelper helper = new NACEHelper();
+            ViewBag.NACEs = helper.GetAll();
         }
     }
 }
