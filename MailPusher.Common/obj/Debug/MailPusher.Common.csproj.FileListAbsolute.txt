@@ -1,5 +1,0 @@
-C:\Work\Web\Morten\MailPusher\MailPusher.Common\bin\Debug\MailPusher.Common.dll
-C:\Work\Web\Morten\MailPusher\MailPusher.Common\bin\Debug\MailPusher.Common.pdb
-C:\Work\Web\Morten\MailPusher\MailPusher.Common\obj\Debug\MailPusher.Common.dll
-C:\Work\Web\Morten\MailPusher\MailPusher.Common\obj\Debug\MailPusher.Common.pdb
-C:\Work\Web\Morten\MailPusher\MailPusher.Common\obj\Debug\MailPusher.Common.csprojResolveAssemblyReference.cache

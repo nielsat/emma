@@ -1,1 +1,0 @@
-DEBUG 2017-03-27 11:12:39,450 11686ms EmailProcessorJob      Execute            - test message

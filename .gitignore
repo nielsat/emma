@@ -1,0 +1,5 @@
+logs/
+/packages/
+MailPusher/Content/images/
+bin/
+obj/
