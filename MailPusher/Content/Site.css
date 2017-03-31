@@ -1,1 +1,7 @@
 ﻿
+#rememberMe input[type=checkbox] {
+    margin-left:0px;
+}
+#menuProjectName i {
+    border:0px;
+}
