@@ -1,4 +1,8 @@
 ﻿@model MailPusher.Models.Email
+@{
+    ViewBag.Title = "Unconfirmed publisher";
+}
+
 <input type="hidden" id="publisherId" />
 @Html.Partial("Custom/PublisherEmailFilter", Model)
 @Html.Partial("Custom/SingleEmail")

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Publishers";
 }
 
 <div class="row">
@@ -72,27 +72,62 @@
                         title: '',
                         sortable: false,
                         searchable: false,
-                        defaultContent: "<a class='subscribeBtn' href='#'><i class='fa fa-envelope-o'></i> Subscribe</a> <a class='editBtn' href='#'><i class='fa fa-pencil'></i> Edit</a> <a class='detailsBtn' href='#'><i class='fa fa-info'></i> Details</a>"
+                        defaultContent: "<div class='btnTD'></div><a class='editBtn' href='#'><i class='fa fa-pencil'></i> Edit</a> &nbsp;&nbsp;&nbsp; <a class='subscribeBtn hidden' href='#'><i class='fa fa-envelope-o'></i> Subscribe to newsletter</a> <a class='confirmSubscribtionBtn hidden' href='#'><i class='fa fa-envelope-o'></i> Confirm subscription</a>"
                     }
-                ]
+                ],
+                "iDisplayLength": 100,
+                "bLengthChange": false,
+                "oLanguage": {
+                    "sSearch": "Search publishers by name: "
+                }
             });
             $('#myTable').on('draw.dt', function () {
                 initButtons();
                 addCustomFilters();
+                showButtonsBasedOnState();
             });
+
+            $('#myTable').on( 'select', function ( e, dt, type, indexes ) {
+                alert('selected');
+            } );
+
+            function showButtonsBasedOnState()
+            {
+                var table = $('#myTable').DataTable();
+                $.each($("#myTable tr"),function(index,tbRow){
+                    var rowData = table.row(tbRow).data();
+                    if(!!rowData && rowData.state=='@MailPusher.Common.Enums.PublisherStatus.None'){
+                        rowData.state = "<i class='fa fa-exclamation' style='color:red;'></i>&nbsp; &nbsp;" + rowData.state;
+                        table.row(tbRow).data(rowData).draw();
+                        $(tbRow).find(".subscribeBtn").removeClass("hidden");
+                    }
+                    if(!!rowData && rowData.state=='@MailPusher.Common.Enums.PublisherStatus.Subscribed'){
+                        $(tbRow).find(".confirmSubscribtionBtn").removeClass("hidden");
+                    }
+                });
+            }
 
             function initButtons() {
                 var table = $('#myTable').DataTable();
 
-                $(".subscribeBtn").click(function () {
-                    var table = $('#myTable').DataTable();
-                    window.location.href = '@Url.Action("index", "Subscription")' + '?publisherId=' + table.row($(this).parents('tr')).data().id;
+                $("#myTable td").click(function(){
+                    if(!$(this).find("div.btnTD").length)
+                    {
+                        var table = $('#myTable').DataTable();
+                        window.location.href = '@Url.Action("Details", "Publisher")' + '?publisherId=' + table.row($(this).parents('tr')).data().id;
+                    };
                 });
 
-                $(".detailsBtn").click(function () {
+                $(".subscribeBtn").click(function () {
                     var table = $('#myTable').DataTable();
-                    window.location.href = '@Url.Action("Details", "Publisher")' + '?publisherId=' + table.row($(this).parents('tr')).data().id;
+                    window.location.href = '@Url.Action("Index", "Subscription")' + '?publisherId=' + table.row($(this).parents('tr')).data().id;
                 });
+
+                $(".confirmSubscribtionBtn").click(function () {
+                    var table = $('#myTable').DataTable();
+                    window.location.href = '@Url.Action("Unconfirmed", "Publisher")' + '?publisherId=' + table.row($(this).parents('tr')).data().id;
+                });
+
                 $(".editBtn").click(function () {
                     var table = $('#myTable').DataTable();
                     window.location.href = '@Url.Action("Edit", "Publisher")' + '?publisherId=' + table.row($(this).parents('tr')).data().id;
@@ -136,7 +171,7 @@
                 {
                     return;
                 };
-                var select = '<label id="customTableFilter"> Status: <select id="publisherStatus" multiple="multiple">';
+                var select = '<label id="customTableFilter"> Filter publishers on state: <select id="publisherStatus" multiple="multiple">';
                 var selectedStatuses = getUrlParameter('publisherStatuses');
                 $.each(@Html.Raw(ViewBag.StatusList), function( index, value ) {
                     var selected = '';
@@ -146,7 +181,7 @@
                     }
                     select+="<option value='"+value.Item2+"' " + selected + ">"+value.Item1 +"</option>";
                 });
-                select +="</select></label>";
+                select +="</select></label> &nbsp; &nbsp; &nbsp;";
                 $("#myTable_filter").prepend(select);
                 $('#publisherStatus').multiselect();
                 $("#publisherStatus").change(function(){
@@ -167,6 +202,8 @@
                     $("#publisherMenuItem").removeClass("current-page");
                 }
             }
+
+            $('div.dataTables_filter input').addClass('form-control');
         });
     </script>
     }
