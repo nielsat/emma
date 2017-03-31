@@ -149,6 +149,11 @@ namespace MailPusher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var requiredPassword = Common.Helpers.AppSettingsHelper.GetValueFromAppSettings(Common.Enums.AppSettingsKey.projectRegisterPassword);
+            if (model.ProjectPassword != requiredPassword)
+            {
+                ModelState.AddModelError("error", "Emma Password is invalid");
+            }
             if (ModelState.IsValid)
             {
                 var user = new AppUser { UserName = model.Email, Email = model.Email };

@@ -12,6 +12,7 @@ namespace MailPusher.Common.Enums
         hmailServerEmailBaseFolder,
         emailParsingSchedulerIntervalInSeconds,
         emailStorageBaseAddress,
-        emailStorageBaseWebAddress
+        emailStorageBaseWebAddress,
+        projectRegisterPassword
     }
 }
