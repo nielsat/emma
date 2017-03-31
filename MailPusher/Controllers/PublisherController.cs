@@ -98,10 +98,12 @@ namespace MailPusher.Controllers
             return Json(helper.ChangePublisherStatus(status, id, currentUserId));
         }
 
-        public ActionResult Unconfirmed()
+        public ActionResult Unconfirmed(int? publisherId)
         {
             EmailHelper helper = new EmailHelper();
-            return View(helper.GetFirstPublisherEmail(PublisherStatus.Subscribed));
+            return View(publisherId.HasValue?
+                helper.GetFirstPublisherEmail(PublisherStatus.Subscribed, publisherId.Value):
+                helper.GetFirstPublisherEmail(PublisherStatus.Subscribed));
         }
 
         private void InitLists() {

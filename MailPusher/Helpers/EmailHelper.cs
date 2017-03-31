@@ -33,10 +33,16 @@ namespace MailPusher.Helpers
             return result;
         }
 
-        public Email GetFirstPublisherEmail(Common.Enums.PublisherStatus status)
+        public Email GetFirstPublisherEmail(PublisherStatus status)
         {
             EmailRepo repo = new EmailRepo();
             return Map(repo.GetFirstPublisherEmail(status));
+        }
+
+        public Email GetFirstPublisherEmail(PublisherStatus status, int publisherId)
+        {
+            EmailRepo repo = new EmailRepo();
+            return Map(repo.GetFirstPublisherEmail(status, publisherId));
         }
 
         public Email Map(Repository.Models.Email email)

@@ -62,5 +62,16 @@
                     return data;
                 }
             });
+
+        $(document).ready(function(){
+            if(isSpecificPublisherState()) {
+                publisherFilter.hide();
+            };
+        });
+
+        function isSpecificPublisherState()
+        {
+            return !!getUrlParameter("publisherId");
+        }
     </script>
     }

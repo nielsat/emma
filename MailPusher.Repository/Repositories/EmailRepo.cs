@@ -10,7 +10,7 @@ namespace MailPusher.Repository.Repositories
 {
     public class EmailRepo
     {
-        public Email GetFirstPublisherEmail(Common.Enums.PublisherStatus status)
+        public Email GetFirstPublisherEmail(PublisherStatus status)
         {
             Email result = new Email();
             using (var context = new MailPusherDBContext())
@@ -20,6 +20,16 @@ namespace MailPusher.Repository.Repositories
                 {
                     result = context.Emails.OrderBy(x=>x.ID).FirstOrDefault(x => x.PublisherID == publisher.ID);
                 }
+            }
+            return result;
+        }
+
+        public Email GetFirstPublisherEmail(PublisherStatus status, int publisherID)
+        {
+            Email result = new Email();
+            using (var context = new MailPusherDBContext())
+            {
+                result = context.Emails.OrderBy(x => x.ID).FirstOrDefault(x => x.PublisherID == publisherID);
             }
             return result;
         }
