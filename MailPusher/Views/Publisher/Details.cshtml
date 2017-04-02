@@ -128,7 +128,14 @@
             });
             $('#myTable').on('draw.dt', function () {
                 initButtons();
+                changeGridStyle();
             });
+
+            function changeGridStyle()
+            {
+                gridHelper.updateContainerHeight('myTableContainer','myTable',200);
+                //gridHelper.changeTdCursorToPointer('myTable','detailsBtn');
+            }
 
             function initButtons() {
                 var table = $('#myTable').DataTable();

@@ -17,7 +17,7 @@
             <div class="x_content">
                 <div id="datatable-checkbox_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                     <div class="row">
-                        <div class="col-sm-12" style="min-height:400px">
+                        <div class="col-sm-12" style="min-height:400px" id="myTableContainer">
                             <table id="myTable" class="table table-striped table-bordered dataTable no-footer table-hover">
                             </table>
                         </div>
@@ -33,10 +33,10 @@
             $('#myTable').dataTable({
                 serverSide: true,
                 ajax: {url:'@Url.Action("Get", "Publisher")',
-                        data:function ( d ) {
-                            d.publisherStatuses = GetPublisherCombinedStatus();
-                            d.isPotentiallyCancelled = IsPotentiallyCancelled();
-                        }},
+                    data:function ( d ) {
+                        d.publisherStatuses = GetPublisherCombinedStatus();
+                        d.isPotentiallyCancelled = IsPotentiallyCancelled();
+                    }},
                 columns: [
                     {
                         name: 'name',
@@ -72,7 +72,7 @@
                         title: '',
                         sortable: false,
                         searchable: false,
-                        defaultContent: "<div class='btnTD'></div><a class='editBtn' href='#'><i class='fa fa-pencil'></i> Edit</a> &nbsp;&nbsp;&nbsp; <a class='subscribeBtn hidden' href='#'><i class='fa fa-envelope-o'></i> Subscribe to newsletter</a> <a class='confirmSubscribtionBtn hidden' href='#'><i class='fa fa-envelope-o'></i> Confirm subscription</a>"
+                        defaultContent: "<div class='btnTD'></div><a class='editBtn' href='#'><i class='fa fa-pencil'></i> Edit</a> &nbsp;&nbsp;&nbsp; <a class='subscribeBtn hidden' href='#'><i class='fa fa-envelope-o'></i> Subscribe to newsletter</a> <a class='confirmSubscribtionBtn hidden' href='#'><i class='fa fa-envelope-o'></i> Confirm subscription</a>",
                     }
                 ],
                 "iDisplayLength": 100,
@@ -85,11 +85,18 @@
                 initButtons();
                 addCustomFilters();
                 showButtonsBasedOnState();
+                changeGridStyle();
             });
 
-            $('#myTable').on( 'select', function ( e, dt, type, indexes ) {
-                alert('selected');
-            } );
+            function changeGridStyle()
+            {
+                gridHelper.updateContainerHeight('myTableContainer','myTable',200);
+                gridHelper.changeTdCursorToPointer('myTable','btnTD');
+                if($(".subscribeBtn.hidden").length!=$(".subscribeBtn").length
+                    ||$(".confirmSubscribtionBtn.hidden").length!=$(".confirmSubscribtionBtn").length){
+                    $(".btnTD").parents('td').css("width","250px");
+                }
+            }
 
             function showButtonsBasedOnState()
             {
