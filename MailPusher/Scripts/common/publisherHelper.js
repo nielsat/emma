@@ -46,3 +46,30 @@
         $("#publisherEmailFilterPanel").hide();
     }
 };
+
+var injectedCountryFilter = {
+    settings: {
+        countryFilterContainerID:'',
+        onCountryChanged: function (countryCode) { }
+    },
+    innerSettings: {
+        countryFilterId:'countryListFilter',
+    },
+    init: function (inSettings) {
+        var self = this;
+        self.settings = inSettings;
+        var initCountryFilter = function (settings) {
+            $("#" + settings.countryFilterContainerID).append('<div class="row"><div class="col-md-3"><h2> Country:</h2></div><div class="col-md-9"><input type="text" data-provide="typeahead" id="' + self.innerSettings.countryFilterId + '" class="form-control col-md-7 col-xs-12"/></div></div>');
+            initCountryTypeahead(self.innerSettings.countryFilterId);
+            $("#" + self.innerSettings.countryFilterId).change(function () {
+                self.countryChanged();
+            });
+        };
+        initCountryFilter(self.settings);
+    },
+    countryChanged: function () {
+        var self = this;
+        var countryCode = GetCountryCode($("#" + self.innerSettings.countryFilterId).val());
+        self.settings.onCountryChanged(countryCode);
+    }
+}

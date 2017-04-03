@@ -3,15 +3,15 @@
 @{
     ViewBag.Title = "Subscribe publisher";
 }
-<div class="title_left">
-    <h3>Here is the information for the publisher we need to subscribe:</h3>
+<div class="title_left" id="subscribeHeader">
+    <h3>Next publisher to subcribe:</h3>
 </div>
-
-@Html.Partial("Custom/PublisherEmailFilter", Model)
 
 <div class="x_panel">
     <div class="x_title">
         <h2>Publisher: <label id="publisherName"></label> </h2>
+        <div class="nav navbar-right panel_toolbox" id="countryFilterContainer">
+        </div>
         <div class="clearfix"></div>
     </div>
     <div class="x_content">
@@ -33,10 +33,10 @@
                     <input type="text" readonly="readonly" class="form-control col-md-6 col-xs-12" id="publisherEmail" />
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-primary" type="button" onclick="CopyToClipboard('publisherEmail')">Copy to clipboard</button>
+                    <button class="btn btn-primary  full-width" type="button" onclick="CopyToClipboard('publisherEmail')">Copy to clipboard</button>
                 </div>
             </div>
-
+            <br /><br /><br />
             <div class="form-group">
                 <div class="col-md-9">
                     <button class="btn btn-success" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Subscribed')">
@@ -44,21 +44,23 @@
                     </button>
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_SubscriptionNotFound')">
+                    <button class="btn btn-danger full-width" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_SubscriptionNotFound')">
                         I couldn't find where to subscribe
                     </button>
                 </div>
             </div>
+            <br />
             <div class="form-group">
                 <div class="col-md-3 col-md-offset-9">
-                    <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_NotAllowedToSubscribe')">
+                    <button class="btn btn-danger full-width" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_NotAllowedToSubscribe')">
                         The website did not allow me to subscribe
                     </button>
                 </div>
             </div>
+            <br />
             <div class="form-group">
                 <div class="col-md-3 col-md-offset-9">
-                    <button class="btn btn-danger" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_DoesNotExist')">
+                    <button class="btn btn-danger full-width" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Error_DoesNotExist')">
                         The website does not exist
                     </button>
                 </div>
@@ -70,29 +72,17 @@
 
 @section Scripts{
     <script type="text/javascript">
-        publisherFilter.init(
-            {
-                'onPublisherChanged': function (data) { InitPublisher(data); },
-                'getFirstUrl': '@Url.Action("GetFirstPublisher", "Subscription")',
-                'getNextUrl': '@Url.Action("GetNextPublisher", "Subscription")',
-                'getPrevUrl': '@Url.Action("GetPrevPublisher", "Subscription")',
-                'extendRequestParams': function (data) {
-                    data.status = @((int)MailPusher.Common.Enums.PublisherStatus.None);
-                    data.publisherId = $("#publisherId").val();
-                    return data;
-                }
-            });
         function ChangePublisherStatus(newStatus) {
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": $("#publisherId").val() }).done(function (result) {
                 if(result===true)
                 {
-                    $.notify('Successfully changed publisher state to ' + newStatus, 
+                    $.notify('Successfully changed publisher state to ' + newStatus,
                         {
                             type: 'success',
                             placement:{align:'center'}
                         });
                     if(!isSpecificPublisherState()){
-                        publisherFilter.getFirst();
+                        injectedCountryFilter.countryChanged();
                     };
                 }
             });
@@ -122,9 +112,25 @@
         InitPublisher(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)))
 
         $(document).ready(function(){
-            if(isSpecificPublisherState()) {
-                publisherFilter.hide();
-            };
+            if(!isSpecificPublisherState()) {
+                injectedCountryFilter.init({
+                    countryFilterContainerID: 'countryFilterContainer',
+                    onCountryChanged: function (countryCode) {
+                        var requestData = {
+                            'countryCode': countryCode,
+                            'status':@((int)MailPusher.Common.Enums.PublisherStatus.None),
+                            'publisherId': $("#publisherId").val(),
+                        };
+                        if (!!requestData) {
+                            $.get('@Url.Action("GetFirstPublisher", "Subscription")', requestData).done(function (data) {
+                                InitPublisher(data);
+                            });
+                        }
+                    },
+                });
+            }else{
+                $("#subscribeHeader").hide();
+            }
         });
 
         function isSpecificPublisherState()
