@@ -11,5 +11,6 @@ namespace MailPusher.Models
         public string Domain { get; set; }
         public string SubscriberEmail { get; set; }
         public string PublisherName { get; set; }
+        public string Language { get; set; }
     }
 }

@@ -214,6 +214,7 @@
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\NACEHelper.cs" />
     <Compile Include="Helpers\PublisherHelper.cs" />
+    <Compile Include="Helpers\UserSettingsHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Models\NACE.cs" />
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\PublisherEmail.cs" />
+    <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

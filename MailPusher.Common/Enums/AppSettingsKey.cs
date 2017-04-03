@@ -13,6 +13,7 @@ namespace MailPusher.Common.Enums
         emailParsingSchedulerIntervalInSeconds,
         emailStorageBaseAddress,
         emailStorageBaseWebAddress,
-        projectRegisterPassword
+        projectRegisterPassword,
+        defaultUserLanguage
     }
 }

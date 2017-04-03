@@ -49,7 +49,8 @@
 
 var injectedCountryFilter = {
     settings: {
-        countryFilterContainerID:'',
+        countryFilterContainerID: '',
+        selectedCountryCode:'',
         onCountryChanged: function (countryCode) { }
     },
     innerSettings: {
@@ -59,8 +60,8 @@ var injectedCountryFilter = {
         var self = this;
         self.settings = inSettings;
         var initCountryFilter = function (settings) {
-            $("#" + settings.countryFilterContainerID).append('<div class="row"><div class="col-md-3"><h2> Country:</h2></div><div class="col-md-9"><input type="text" data-provide="typeahead" id="' + self.innerSettings.countryFilterId + '" class="form-control col-md-7 col-xs-12"/></div></div>');
-            initCountryTypeahead(self.innerSettings.countryFilterId);
+            $("#" + settings.countryFilterContainerID).append('<div class="row"><div class="col-md-8"><h2> Show only publishers from the following country:</h2></div><div class="col-md-4"><select id="' + self.innerSettings.countryFilterId + '" class="form-control"/></div></div>');
+            initShortCountrySelect(self.innerSettings.countryFilterId, self.settings.selectedCountryCode);
             $("#" + self.innerSettings.countryFilterId).change(function () {
                 self.countryChanged();
             });
@@ -69,7 +70,7 @@ var injectedCountryFilter = {
     },
     countryChanged: function () {
         var self = this;
-        var countryCode = GetCountryCode($("#" + self.innerSettings.countryFilterId).val());
+        var countryCode = $("#" + self.innerSettings.countryFilterId).val();
         self.settings.onCountryChanged(countryCode);
     }
 }

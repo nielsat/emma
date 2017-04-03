@@ -4,3 +4,6 @@
 #menuProjectName i {
     border:0px;
 }
+.filterWithLongText {
+    min-width:600px !important;
+}

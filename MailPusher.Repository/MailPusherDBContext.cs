@@ -13,6 +13,7 @@ namespace MailPusher.Repository
     {
         public static MailPusherDBContext Create()
         {
+            Database.SetInitializer<MailPusherDBContext>(new MigrateDatabaseToLatestVersion<MailPusherDBContext, Migrations.Configuration>());
             return new MailPusherDBContext();
         }
         public DbSet<Email> Emails { get; set; }
@@ -20,5 +21,6 @@ namespace MailPusher.Repository
         public DbSet<EmailRawHeader> EmailRawHeaders { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<NACE> NACEs { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
     }
 }

@@ -10,7 +10,7 @@
 <div class="x_panel">
     <div class="x_title">
         <h2>Publisher: <label id="publisherName"></label> </h2>
-        <div class="nav navbar-right panel_toolbox" id="countryFilterContainer">
+        <div class="nav navbar-right panel_toolbox filterWithLongText" id="countryFilterContainer">
         </div>
         <div class="clearfix"></div>
     </div>
@@ -115,6 +115,7 @@
             if(!isSpecificPublisherState()) {
                 injectedCountryFilter.init({
                     countryFilterContainerID: 'countryFilterContainer',
+                    selectedCountryCode:'@Model.Language',
                     onCountryChanged: function (countryCode) {
                         var requestData = {
                             'countryCode': countryCode,

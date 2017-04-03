@@ -2,6 +2,7 @@
 using MailPusher.Common.Helpers;
 using MailPusher.Helpers;
 using MailPusher.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,20 +36,34 @@ namespace MailPusher.Controllers
                 Domain = publisher.Domain,
                 PublisherId = publisher.ID.ToString(),
                 SubscriberEmail = string.Format(emailTemplate, publisher.ID),
-                PublisherName = publisher.Name
+                PublisherName = publisher.Name,
+                Language = publisher.Language
             };
         }
 
         protected Publisher GetPublisher(int? publisherId)
         {
+            Publisher result = new Publisher();
             PublisherHelper helper = new PublisherHelper();
-            Publisher result = publisherId.HasValue? helper.GetPublisher(publisherId.Value):
-                        helper.GetFirstPublisherByStatus(PublisherStatus.None);
+
+            if (!publisherId.HasValue)
+            {
+                UserSettingsHelper usHelper = new UserSettingsHelper();
+                string userLanguage = usHelper.GetUserLanguage(User.Identity.GetUserId());
+                result = helper.GetFirstPublisherByCountryAndStatus(userLanguage, PublisherStatus.None);
+            }
+            else {
+                result = helper.GetPublisher(publisherId.Value);
+            }
             return result;
         }
 
         public ActionResult GetFirstPublisher(string countryCode, PublisherStatus status)
         {
+            //TODO move this to user settings, don't make during search!!
+            UserSettingsHelper usHelper = new UserSettingsHelper();
+            usHelper.Update(User.Identity.GetUserId(), countryCode);
+            //TODO move this to user settings, don't make during search!!
             PublisherHelper helper = new PublisherHelper();
             Publisher publisher = helper.GetFirstPublisherByCountryAndStatus(countryCode, status);
             return Json(GetPublisherEmail(publisher), JsonRequestBehavior.AllowGet);
