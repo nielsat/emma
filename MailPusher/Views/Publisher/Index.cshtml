@@ -39,18 +39,18 @@
                     }},
                 columns: [
                     {
-                        name: 'name',
-                        data: 'name',
-                        title: "Publisher",
-                        sortable: true,
-                        searchable: true
-                    },
-                    {
                         name: 'id',
                         data: "id",
                         title: "ID",
                         sortable: true,
                         searchable: false
+                    },
+                    {
+                        name: 'name',
+                        data: 'name',
+                        title: "Publisher",
+                        sortable: true,
+                        searchable: true
                     },
                     {
                         name: 'state',
@@ -67,7 +67,14 @@
                         searchable: false
                     },
                     {
-                        name: null,
+                        name: 'language',
+                        data: "language",
+                        title: "Country",
+                        sortable: true,
+                        searchable: false
+                    },
+                    {
+                        name: 'btns',
                         data: null,
                         title: '',
                         sortable: false,
@@ -81,29 +88,52 @@
                     "sSearch": "Search publishers by name: "
                 }
             });
-            $('#myTable').on('draw.dt', function () {
-                initButtons();
-                addCustomFilters();
-                showButtonsBasedOnState();
-                changeGridStyle();
+            var triggerDrawUpdate = true;
+            $('#myTable').on('draw.dt', function (source) {
+                if(triggerDrawUpdate)
+                {
+                    changeCountryNames();
+                    addCustomFilters();
+                    showButtonsBasedOnState();
+                    initButtons();
+                    changeGridStyle();
+                    triggerDrawUpdate = true;
+                }
             });
+
+            function changeCountryNames(){
+                var table = $('#myTable').DataTable();
+                $.each($("#myTable tr"),function(index,tbRow){
+                    var rowData = table.row(tbRow).data();
+                    if(!!rowData && !!rowData.language)
+                    {
+                        rowData.language = countryHelper.getCountryByCode(rowData.language);
+                        if(rowData.language!=''){
+                            triggerDrawUpdate=false;
+                            table.row(tbRow).data(rowData).draw();
+                        }
+                    };
+                });
+            }
 
             function changeGridStyle()
             {
-                gridHelper.updateContainerHeight('myTableContainer','myTable',200);
-                gridHelper.changeTdCursorToPointer('myTable','btnTD');
                 if($(".subscribeBtn.hidden").length!=$(".subscribeBtn").length
                     ||$(".confirmSubscribtionBtn.hidden").length!=$(".confirmSubscribtionBtn").length){
                     $(".btnTD").parents('td').css("width","250px");
                 }
+                gridHelper.updateContainerHeight('myTableContainer','myTable',200);
+                gridHelper.changeTdCursorToPointer('myTable','btnTD');
             }
 
             function showButtonsBasedOnState()
             {
                 var table = $('#myTable').DataTable();
+                var needDrow= false;
                 $.each($("#myTable tr"),function(index,tbRow){
                     var rowData = table.row(tbRow).data();
                     if(!!rowData && rowData.state=='@MailPusher.Common.Enums.PublisherStatus.None'){
+                        triggerDrawUpdate=false;
                         rowData.state = "<i class='fa fa-exclamation' style='color:red;'></i>&nbsp; &nbsp;" + rowData.state;
                         table.row(tbRow).data(rowData).draw();
                         $(tbRow).find(".subscribeBtn").removeClass("hidden");

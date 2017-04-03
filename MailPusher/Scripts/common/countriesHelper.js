@@ -24,3 +24,8 @@ function GetCountryCode(countryName)
     });
     return result;
 }
+var countryHelper = {
+    getCountryByCode: function (code) {
+        return !!countryList[code]?countryList[code]:'';
+    }
+}
