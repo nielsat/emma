@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MailPusher.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,16 @@ namespace MailPusher.Common.Helpers
                     break;
             }
             return string.Format("{0} {1:yyyy.MM.dd} at {1:hh:mm} GMT", prefix, utcDate);
+        }
+
+        public static string GetFormtedStatus(PublisherStatus status, DateTime? changed)
+        {
+            string datePart = string.Empty;
+            if (changed.HasValue)
+            {
+                datePart = string.Format("({0:yyyy-MM-dd})", changed.Value.ToUniversalTime());
+            }
+            return string.Format("{0} {1}", status.ToString(), datePart);
         }
     }
 }

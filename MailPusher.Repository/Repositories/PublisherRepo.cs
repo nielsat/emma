@@ -84,6 +84,10 @@ namespace MailPusher.Repository.Repositories
                 if (dbPublisher != null)
                 {
                     dbPublisher.Domain = publisher.Domain;
+                    if (publisher.Status != dbPublisher.Status)
+                    {
+                        dbPublisher.StatusChanged = DateTime.UtcNow;
+                    }
                     dbPublisher.Status = publisher.Status;
                     dbPublisher.Language = publisher.Language;
                     dbPublisher.NACEID = publisher.NACEID;
@@ -105,6 +109,10 @@ namespace MailPusher.Repository.Repositories
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
                 Publisher result = context.Publishers.FirstOrDefault(x=>x.ID==id);
+                if (status != result.Status)
+                {
+                    result.StatusChanged = DateTime.UtcNow;
+                }
                 result.Status = status;
                 result.UpdaterId = userId;
                 result.Updated = DateTime.UtcNow;

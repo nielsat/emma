@@ -30,5 +30,6 @@ namespace MailPusher.Repository.Models
         [ForeignKey("Updater")]
         public string UpdaterId { get; set; }
         public virtual AppUser Updater { get; set; }
+        public DateTime? StatusChanged { get; set; }
     }
 }

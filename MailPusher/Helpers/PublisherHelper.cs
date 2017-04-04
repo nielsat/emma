@@ -125,7 +125,8 @@ namespace MailPusher.Helpers
                 Category = publisher.NACE==null? string.Empty: publisher.NACE.Description,
                 CreatorId = publisher.CreatorId,
                 UpdaterId = publisher.UpdaterId,
-                LastReceivedEmail = publisher.LastReceivedEmail.HasValue? FormatHelper.ConvertDateToString(publisher.LastReceivedEmail.Value) :""
+                LastReceivedEmail = publisher.LastReceivedEmail.HasValue? FormatHelper.ConvertDateToString(publisher.LastReceivedEmail.Value) :"",
+                FormatedStatus = FormatHelper.GetFormtedStatus(publisher.Status, publisher.StatusChanged)
             };
         }
     }

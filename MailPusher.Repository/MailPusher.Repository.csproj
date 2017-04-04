@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201704031332446_UserSettings.Designer.cs">
       <DependentUpon>201704031332446_UserSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704041320007_Publisher_StatusChanged.cs" />
+    <Compile Include="Migrations\201704041320007_Publisher_StatusChanged.Designer.cs">
+      <DependentUpon>201704041320007_Publisher_StatusChanged.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppRole.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -113,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704031332446_UserSettings.resx">
       <DependentUpon>201704031332446_UserSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704041320007_Publisher_StatusChanged.resx">
+      <DependentUpon>201704041320007_Publisher_StatusChanged.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
