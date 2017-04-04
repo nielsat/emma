@@ -45,6 +45,7 @@
     <Compile Include="Enums\PublisherStatus.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Helpers\AppSettingsHelper.cs" />
+    <Compile Include="Helpers\FormatHelper.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\EmailHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

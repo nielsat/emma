@@ -38,7 +38,7 @@ namespace MailPusher.Scheduler.Jobs
                             EmailHeaders = GetEmailHeaders(message),
                             HTML = emailHTML,
                             HTMLText = emailHTML,
-                            ReceivedGMT = message.ReceivedTime,
+                            ReceivedGMT = message.ReceivedTime.ToUniversalTime(),
                             SenderAddress = message.From,
                             SenderName = message.Sender,
                             SubjectLine = message.Subject,

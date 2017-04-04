@@ -42,7 +42,7 @@ namespace MailPusher.Repository.Repositories
             }
             if (isPotentiallyCancelled)
             {
-                var date = DateTime.Now.AddDays(-30);
+                var date = DateTime.UtcNow.AddDays(-30);
                 query = query.Where(x => x.LastReceivedEmail < date);
             }
             return query;
@@ -63,8 +63,8 @@ namespace MailPusher.Repository.Repositories
 
         public Publisher Create(Publisher publisher)
         {
-            publisher.Created = DateTime.Now;
-            publisher.Updated = DateTime.Now;
+            publisher.Created = DateTime.UtcNow;
+            publisher.Updated = DateTime.UtcNow;
             Publisher result = new Publisher();
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
@@ -106,7 +106,7 @@ namespace MailPusher.Repository.Repositories
                 Publisher result = context.Publishers.FirstOrDefault(x=>x.ID==id);
                 result.Status = status;
                 result.UpdaterId = userId;
-                result.Updated = DateTime.Now;
+                result.Updated = DateTime.UtcNow;
                 context.Entry(result).State = EntityState.Modified;
                 context.SaveChanges();
             }
@@ -180,7 +180,7 @@ namespace MailPusher.Repository.Repositories
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
                 result = context.Publishers.FirstOrDefault(x => x.ID == publisherID);
-                result.LastReceivedEmail = DateTime.Now;
+                result.LastReceivedEmail = DateTime.UtcNow;
                 context.Entry(result).State = EntityState.Modified;
                 context.SaveChanges();
             }
