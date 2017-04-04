@@ -22,5 +22,8 @@ namespace MailPusher.Models
         }
         public string UpdaterId { get; set; }
         public string CreatorId { get; set; }
+
+        public int ReceivedEmails { get; set; }
+        public string LastReceivedEmail { get; set; }
     }
 }

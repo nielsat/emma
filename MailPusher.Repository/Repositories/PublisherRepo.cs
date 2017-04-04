@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using MailPusher.Common.Models;
 
 namespace MailPusher.Repository.Repositories
 {
@@ -183,6 +184,21 @@ namespace MailPusher.Repository.Repositories
                 result.LastReceivedEmail = DateTime.UtcNow;
                 context.Entry(result).State = EntityState.Modified;
                 context.SaveChanges();
+            }
+            return result;
+        }
+
+        public List<PublisherStats> GetStats(List<int> publisherIds)
+        {
+            List<PublisherStats> result = new List<PublisherStats>();
+            using (MailPusherDBContext context = new MailPusherDBContext())
+            {
+                var resultQuery = context.Emails.Where(x => publisherIds.Contains(x.PublisherID)).GroupBy(x => x.PublisherID).Select(group => new PublisherStats()
+                {
+                    PublisherId = group.Key,
+                    ReceivedEmails = group.Count()
+                });
+                result.AddRange(resultQuery);
             }
             return result;
         }

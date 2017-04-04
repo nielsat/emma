@@ -31,7 +31,7 @@ namespace MailPusher.Controllers
         {
             PublisherHelper helper = new PublisherHelper();
             
-            var filteredData = helper.GetPublishers(request.Start, request.Length, request.Search.Value, publisherStatuses, isPotentiallyCancelled);
+            var filteredData = helper.GetPublishersWithStats(request.Start, request.Length, request.Search.Value, publisherStatuses, isPotentiallyCancelled);
 
             var response = DataTablesResponse.Create(request, helper.GetTotalRecords(), helper.GetTotalFilteredRecords(request.Search.Value, publisherStatuses, isPotentiallyCancelled), filteredData);
 

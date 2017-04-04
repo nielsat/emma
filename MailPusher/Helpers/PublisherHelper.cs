@@ -1,4 +1,5 @@
 ﻿using MailPusher.Common.Enums;
+using MailPusher.Common.Helpers;
 using MailPusher.Models;
 using MailPusher.Repository.Repositories;
 using System;
@@ -24,6 +25,19 @@ namespace MailPusher.Helpers
         {
             PublisherRepo repo = new PublisherRepo();
             return Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled));
+        }
+
+        public List<Publisher> GetPublishersWithStats(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
+        {
+            PublisherRepo repo = new PublisherRepo();
+            List<Publisher> publishers = Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled));
+            var publishersStats = repo.GetStats(publishers.Select(x => x.ID).ToList());
+            foreach (var publisher in publishers)
+            {
+                var currentPublisherStats = publishersStats.FirstOrDefault(x => x.PublisherId == publisher.ID);
+                publisher.ReceivedEmails = currentPublisherStats == null ? 0 : currentPublisherStats.ReceivedEmails;
+            }
+            return publishers;
         }
 
         public Publisher GetPublisher(int publisherId) {
@@ -110,7 +124,8 @@ namespace MailPusher.Helpers
                 Status = publisher.Status,
                 Category = publisher.NACE==null? string.Empty: publisher.NACE.Description,
                 CreatorId = publisher.CreatorId,
-                UpdaterId = publisher.UpdaterId
+                UpdaterId = publisher.UpdaterId,
+                LastReceivedEmail = publisher.LastReceivedEmail.HasValue? FormatHelper.ConvertDateToString(publisher.LastReceivedEmail.Value) :""
             };
         }
     }
