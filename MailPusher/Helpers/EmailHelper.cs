@@ -55,7 +55,7 @@ namespace MailPusher.Helpers
                 Copy = email.Copy,
                 ID = email.ID,
                 PublisherID = email.PublisherID,
-                ReceivedGMT = string.Format("{0:dd.MM.yyyy hh:mm}",email.ReceivedGMT),
+                ReceivedGMT = string.Format("{0:dd.MM.yyyy} at {0:hh:mm} GMT",email.ReceivedGMT),
                 SenderAddress = email.SenderAddress,
                 SenderName = email.SenderName,
                 SubjectLine = email.SubjectLine
