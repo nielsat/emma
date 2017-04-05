@@ -112,7 +112,7 @@
             });
             return false;
         });
-        initShortCountrySelect("publisherLanguage","@Model.Language");
+        initShortCountrySelect("publisherLanguage");
         var naceTreeData = @Html.Raw(ViewBag.NACETree);
         $("#naceTree").jstree({ 'core' : {'data' : naceTreeData},
             "plugins" : [ "sort" ] });
