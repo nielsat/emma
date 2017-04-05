@@ -7,3 +7,36 @@
 .filterWithLongText {
     min-width:600px !important;
 }
+
+.jstree-default a { 
+    white-space:normal !important; height: auto; 
+}
+.jstree-anchor {
+    height: auto !important;
+}
+.jstree-default li > ins { 
+    vertical-align:top; 
+}
+.jstree-leaf {
+    height: auto;
+}
+.jstree-leaf a{
+    height: auto !important;
+}
+
+#naceTree .tooltip-inner {
+    max-width: 950px;
+    /* If max-width does not work, try using width instead */
+    width: 950px; 
+}
+
+.naceTree {
+    text-align:left;
+}
+.naceTree td:nth-child(1) {  
+  width:100px;
+}
+.naceTree tr > td
+{
+  padding-bottom: 5px;
+}

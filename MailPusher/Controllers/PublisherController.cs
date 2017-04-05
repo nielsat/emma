@@ -108,7 +108,8 @@ namespace MailPusher.Controllers
 
         private void InitLists() {
             NACEHelper helper = new NACEHelper();
-            ViewBag.NACEs = helper.GetAll();
+            var naceData = helper.GetAll();
+            ViewBag.NACETree = Newtonsoft.Json.JsonConvert.SerializeObject(helper.GenerateTree(naceData));
         }
     }
 }

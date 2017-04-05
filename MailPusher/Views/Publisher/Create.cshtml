@@ -34,7 +34,7 @@
                             Language <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" data-provide="typeahead" id="publisherLanguage" class="form-control col-md-7 col-xs-12"  required = "required"/>
+                            <select id="publisherLanguage" class="form-control col-md-7 col-xs-12" required="required"></select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -42,12 +42,15 @@
                             NACEID <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select id="publisherNACE" class="form-control">
-                                @foreach (MailPusher.Models.NACE item in ViewBag.NACEs)
-                                {
-                                    <option value="@item.ID">@item.Description</option>
-                                }
-                            </select>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <input type="hidden" id="publisherNACEid"/>
+                                    <input type="text" id="publisherNACE" disabled="disabled" class="form-control col-md-7 col-xs-12" />
+                                </div>
+                                <div class="col-md-3">
+                                    <button id="showNaceTreeBtn" class="btn btn-default full-width" data-toggle="modal" data-target="#naceModal" type="button">Select</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -57,6 +60,25 @@
                             <button id="submitBtn" class="btn btn-success">Submit</button>
                         </div>
                     </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="naceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <br />
+                                    <h3>NACE selection</h3>
+                                    <br />
+                                </div>
+                                <div class="modal-body">
+                                    <div id="naceTree" class="demo jstree jstree-1 jstree-default"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="selectNACECloseBtn">Close</button>
+                                    <button type="button" class="btn btn-primary" id="selectNACESaveBtn">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -64,6 +86,8 @@
 </div>
 
 @section Scripts{
+    <link rel="stylesheet" type="text/css" href="~/Content/jstree/style.css" media="screen" />
+    <script type="text/javascript" src="~/Scripts/jstree/jstree.min.js"></script>
     <script type="text/javascript">
         $("#submitBtn").click(function () {
             var requiredFormsValid = true;
@@ -79,8 +103,8 @@
             $.post('@Url.Action("Create", "Publisher")', {
                 'Name': $("#publisherName").val(),
                 'Domain': $("#publisherDomain").val(),
-                'Language': GetCountryCode($("#publisherLanguage").val()),
-                'NACEID': $("#publisherNACE").val(),
+                'Language': $("#publisherLanguage").val(),
+                'NACEID': $("#publisherNACEid").val(),
             }).done(function (result) {
                 if (result === "ok") {
                     window.location.href = '@Url.Action("Index", "Publisher")'
@@ -88,7 +112,33 @@
             });
             return false;
         });
-        initCountryTypeahead("publisherLanguage");
+        initShortCountrySelect("publisherLanguage","@Model.Language");
+        var naceTreeData = @Html.Raw(ViewBag.NACETree);
+        $("#naceTree").jstree({ 'core' : {'data' : naceTreeData},
+            "plugins" : [ "sort" ] });
+        $("#naceTree").bind('loaded.jstree', function(e, data) {
+            $('.treeTooltip').tooltip({'html':true,'placement':'top','trigger':'hover'});
+        });
+        $("#naceTree").bind("open_node.jstree", function (event, data) {
+            $('.treeTooltip').tooltip({'html':true,'placement':'top','trigger':'hover'});
+        });
+        $("#selectNACESaveBtn").click(function(){
+            var selectedNode = $('#naceTree').jstree().get_selected(true)[0];
+            if(!!selectedNode)
+            {
+                $("#publisherNACEid").val(selectedNode.a_attr.id);
+                $("#publisherNACE").val(selectedNode.text);
+                $("#selectNACECloseBtn").click();
+            }
+            else{
+                $.notify('Please select NACE',
+                       {
+                           type: 'danger',
+                           placement:{align:'center'},
+                           z_index:1100
+                       });
+            }
+        });
     </script>
 
     }

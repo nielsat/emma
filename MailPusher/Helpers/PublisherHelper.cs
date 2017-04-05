@@ -120,6 +120,7 @@ namespace MailPusher.Helpers
                 ID = publisher.ID,
                 Language = publisher.Language,
                 NACEID = publisher.NACEID,
+                NACEDescription = publisher.NACE.Description,
                 Name = publisher.Name,
                 Status = publisher.Status,
                 Category = publisher.NACE==null? string.Empty: publisher.NACE.Description,

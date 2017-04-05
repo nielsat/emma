@@ -9,5 +9,11 @@ namespace MailPusher.Models
     {
         public int ID { get; set; }
         public string Description { get; set; }
+        public string ParentCode { get; set; }
+        public string Excludes { get; set; }
+        public string Includes { get; set; }
+        public string Rulings { get; set; }
+        public string Code { get; set; }
+
     }
 }

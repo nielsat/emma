@@ -80,7 +80,7 @@ namespace MailPusher.Repository.Repositories
             Publisher result = new Publisher(); 
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
-                Publisher dbPublisher = context.Publishers.Include(x=>x.NACE).FirstOrDefault(x => x.ID == publisher.ID);
+                Publisher dbPublisher = context.Publishers.FirstOrDefault(x => x.ID == publisher.ID);
                 if (dbPublisher != null)
                 {
                     dbPublisher.Domain = publisher.Domain;
@@ -99,7 +99,7 @@ namespace MailPusher.Repository.Repositories
                 context.Entry(dbPublisher).State = EntityState.Modified;
                 context.SaveChanges();
 
-                result = dbPublisher;
+                result = context.Publishers.Include(x => x.NACE).FirstOrDefault(x => x.ID == publisher.ID); ;
             }
             return result;
         }
