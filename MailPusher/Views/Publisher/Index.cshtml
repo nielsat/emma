@@ -202,20 +202,6 @@
                 return combinedStatus;
             }
 
-            function GetURLParamPublisherStatuses(){
-                return getUrlParameter('publisherStatuses');
-            }
-
-            function GetURLParamIsPotentiallyCancelled(){
-                return getUrlParameter('isPotentiallyCancelled')
-            }
-
-            function IsPotentiallyCancelled()
-            {
-                var urlParameter = GetURLParamIsPotentiallyCancelled();
-                return !!urlParameter;
-            }
-
             function addCustomFilters()
             {
                 if(!!$("#customTableFilter").length)
@@ -239,20 +225,7 @@
                     $('#myTable').DataTable().draw();
                 })
             }
-            FixNavigation();
-
-            function FixNavigation(){
-                if(!!GetURLParamPublisherStatuses())
-                {
-                    $("#faildSubscriptionsMenuItem").addClass("current-page");
-                    $("#publisherMenuItem").removeClass("current-page");
-                }
-                if(!!IsPotentiallyCancelled())
-                {
-                    $("#potentiallyCancelledSubscriptionsMenuItem").addClass("current-page");
-                    $("#publisherMenuItem").removeClass("current-page");
-                }
-            }
+            
 
             $('div.dataTables_filter input').addClass('form-control');
         });

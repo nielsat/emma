@@ -12,3 +12,21 @@
         }
     }
 };
+
+function FixNavigation() {
+    var currentPathName = location.pathname+location.search;
+    $("a[href='" + currentPathName + "']").addClass("current-page");
+}
+
+function GetURLParamPublisherStatuses() {
+    return getUrlParameter('publisherStatuses');
+}
+
+function GetURLParamIsPotentiallyCancelled() {
+    return getUrlParameter('isPotentiallyCancelled')
+}
+
+function IsPotentiallyCancelled() {
+    var urlParameter = GetURLParamIsPotentiallyCancelled();
+    return !!urlParameter;
+}
