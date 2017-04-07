@@ -12,7 +12,7 @@ function initCountryTypeahead(typeaheadId, selectedCountryCode)
         autoSelect: true
     });
     mySelect.val(countryList[selectedCountryCode]);
-}
+};
 
 function initShortCountrySelect(selectId, selectedCountryCode) {
     var mySelect = $('#' + selectId);
@@ -31,10 +31,9 @@ function initShortCountrySelect(selectId, selectedCountryCode) {
     });
     selectedCountryCode = !!selectedCountryCode ? selectedCountryCode : "DK";
     mySelect.val(selectedCountryCode);
-}
+};
 
-function GetCountryCode(countryName)
-{
+function GetCountryCode(countryName) {
     var result = '';
     $.each(countryList, function (item) {
         if (countryList[item] == countryName) {
@@ -42,9 +41,9 @@ function GetCountryCode(countryName)
         };
     });
     return result;
-}
+};
 var countryHelper = {
     getCountryByCode: function (code) {
-        return !!countryList[code]?countryList[code]:'';
+        return !!countryList[code] ? countryList[code] : '';
     }
-}
+};

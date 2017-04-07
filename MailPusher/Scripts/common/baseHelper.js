@@ -14,24 +14,24 @@
 };
 
 function FixNavigation() {
-    var currentPathName = location.pathname+location.search;
+    var currentPathName = location.pathname + location.search;
     $("a[href='" + currentPathName + "']").addClass("current-page");
-}
+};
 
 function GetURLParamPublisherStatuses() {
     return getUrlParameter('publisherStatuses');
-}
+};
 
 function GetURLParamIsPotentiallyCancelled() {
     return getUrlParameter('isPotentiallyCancelled')
-}
+};
 
 function IsPotentiallyCancelled() {
     var urlParameter = GetURLParamIsPotentiallyCancelled();
     return !!urlParameter;
-}
+};
 
-Utils.prototype = {
+var Utils = {
     constructor: Utils,
     isElementInView: function (element, fullyInView) {
         var pageTop = $(window).scrollTop();
@@ -46,5 +46,3 @@ Utils.prototype = {
         }
     }
 };
-
-var Utils = new Utils();
