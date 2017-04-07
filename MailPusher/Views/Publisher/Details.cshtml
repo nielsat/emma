@@ -148,8 +148,10 @@
                     $(".dataTables_filter .form-control").addClass('full-width-important');
 
                     //FOCUS
-                    var rowpos = $(this).offset();
-                    $(window).scrollTop(rowpos.top-200);
+                    if(!Utils.isElementInView(this)){
+                        var rowpos = $(this).offset();
+                        $(window).scrollTop(rowpos.top-200);
+                    }
                 });
             }
             $("#backToEmailsView").click(function(){
@@ -159,8 +161,10 @@
                 $(".dataTables_filter .form-control").removeClass('full-width-important');
 
                 hideSingleEmail();
-                var rowpos = selectedRow.offset();
-                $(window).scrollTop(rowpos.top-200);
+                if(!Utils.isElementInView(selectedRow)){
+                    var rowpos = selectedRow.offset();
+                    $(window).scrollTop(rowpos.top-200);
+                }
             });
 
             function addCustomFilters()
