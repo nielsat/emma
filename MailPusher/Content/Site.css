@@ -52,4 +52,16 @@
 .current-page {
     background: #D9DEE4 !important;
 }
-    
+.top_nav {
+    width:100%;
+    z-index:10;
+}
+.selectedTdItem {
+    background-color:#c7c7c7 !important;
+}
+.full-width-important {
+    width:100% !important;
+}
+#backToEmailsView {
+    margin-left:100px;
+}

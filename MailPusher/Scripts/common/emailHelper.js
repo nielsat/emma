@@ -1,15 +1,26 @@
 ﻿var emailBodyContainerId = "emailBody";
-function initSingleEmail(email, emailBodyURL) {
+function initSingleEmail(email, emailBodyURL, staticHeight) {
     $("#emailFrom").html(email.senderAddress);
     $("#emailReceivedGMT").html(email.receivedGMT);
     $("#emailSubject").html(email.subjectLine);
-    $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
-        setIframeHeight(emailBodyContainerId, 200);
-        $("#" + emailBodyContainerId).contents().find("html").html(data);
-        updateIframeHeight(emailBodyContainerId);
-        setTimeout(function () { updateIframeHeight(emailBodyContainerId); }, 1000);
-    });
     $("#emailData").show();
+    $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
+        $("#" + emailBodyContainerId).contents().find("html").html(data);
+        if (!staticHeight) {
+            setIframeHeight(emailBodyContainerId, 200);
+            updateIframeHeight(emailBodyContainerId);
+            setTimeout(function () { updateIframeHeight(emailBodyContainerId); }, 1000);
+        } else {
+            var newHeight = staticHeight - $("#emailDataTitle").height() - $("#emailDataSubject").height() - 120;
+            if ($("#" + emailBodyContainerId).height() != newHeight) {
+                setIframeHeight(emailBodyContainerId, newHeight);
+                var offset = $("#emailData").offset();
+                var offsetTop = offset.top > $(".nav.navbar-nav").height()+12 ? offset.top : $(".nav.navbar-nav").height()+12;
+                var width = $("#emailData").width();
+                $("#emailData").css({ 'position': 'fixed', 'top': offsetTop, 'left': offset.left, 'width': width });
+            }
+        }
+    });
 }
 
 function updateIframeHeight(id)
@@ -24,4 +35,8 @@ function setIframeHeight(id, value)
 
 function hideSingleEmail() {
     $("#emailData").hide();
+}
+
+function hideSingleEmailButtons() {
+    $("#emailDataButtons").hide();
 }
