@@ -26,6 +26,5 @@ namespace MailPusher.Models
         public int ReceivedEmails { get; set; }
         public string LastReceivedEmail { get; set; }
         public string FormatedStatus { get; set; }
-        public string NACEDescription { get; set; }
     }
 }

@@ -122,6 +122,18 @@ namespace MailPusher.Repository.Repositories
             return true;
         }
 
+        public bool Delete(int publisherID)
+        {
+            using (MailPusherDBContext context = new MailPusherDBContext())
+            {
+                Publisher dbPublisher = new Publisher() { ID = publisherID };
+                context.Publishers.Attach(dbPublisher);
+                context.Publishers.Remove(dbPublisher);
+                context.SaveChanges();
+            }
+            return true;
+        }
+
         public Publisher GetPublisher(int publisherId)
         {
             Publisher result = new Publisher();

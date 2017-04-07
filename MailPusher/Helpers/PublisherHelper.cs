@@ -108,6 +108,12 @@ namespace MailPusher.Helpers
             };
         }
 
+        public bool Delete(int publisherID)
+        {
+            PublisherRepo repo = new PublisherRepo();
+            return repo.Delete(publisherID);
+        }
+
         public Publisher Map(Repository.Models.Publisher publisher)
         {
             if (publisher == null)
@@ -120,7 +126,6 @@ namespace MailPusher.Helpers
                 ID = publisher.ID,
                 Language = publisher.Language,
                 NACEID = publisher.NACEID,
-                NACEDescription = publisher.NACE.Description,
                 Name = publisher.Name,
                 Status = publisher.Status,
                 Category = publisher.NACE==null? string.Empty: publisher.NACE.Description,

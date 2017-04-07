@@ -111,5 +111,12 @@ namespace MailPusher.Controllers
             var naceData = helper.GetAll();
             ViewBag.NACETree = Newtonsoft.Json.JsonConvert.SerializeObject(helper.GenerateTree(naceData));
         }
+        [HttpPost]
+        public ActionResult Delete(int publisherID)
+        {
+            PublisherHelper helper = new PublisherHelper();
+            helper.Delete(publisherID);
+            return Content("ok");
+        }
     }
 }
