@@ -14,9 +14,10 @@ namespace MailPusher.Controllers
     public class EmailController : Controller
     {
         // GET: Email
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            return View();
+            EmailHelper helper = new EmailHelper();
+            return View(helper.GetEmail(id));
         }
 
         public ActionResult Get(IDataTablesRequest request, int publisherID, string from, string to)

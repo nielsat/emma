@@ -24,6 +24,16 @@ namespace MailPusher.Repository.Repositories
             return result;
         }
 
+        public Email Get(int emailID)
+        {
+            Email result = new Email();
+            using (var context = new MailPusherDBContext())
+            {
+                result = context.Emails.FirstOrDefault(x => x.ID == emailID);
+            }
+            return result;
+        }
+
         public Email GetFirstPublisherEmail(PublisherStatus status, int publisherID)
         {
             Email result = new Email();

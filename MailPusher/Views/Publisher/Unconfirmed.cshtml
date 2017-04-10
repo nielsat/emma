@@ -26,7 +26,7 @@
 
         function updateEmailData(data){
             $("#publisherId").val(data.PublisherID);
-            initSingleEmail(mapSingleEmailData(data),
+            singleEmailHelper.init(singleEmailHelper.map(data),
                 '@Url.Action("GetEmailBody", "Email")');
         }
 
@@ -42,12 +42,6 @@
                     publisherFilter.getFirst();
                 }
             });
-        }
-        function mapSingleEmailData(data){
-            return { "senderAddress":data.SenderAddress,
-                "receivedGMT":data.ReceivedGMT,
-                "subjectLine": data.SubjectLine,
-                "id":data.ID};
         }
 
         publisherFilter.init(
@@ -67,7 +61,7 @@
             if(isSpecificPublisherState()) {
                 publisherFilter.hide();
             };
-            hideSingleEmailButtons();
+            singleEmailHelper.hideButtons();
         });
 
         function isSpecificPublisherState()

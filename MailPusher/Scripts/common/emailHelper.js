@@ -1,42 +1,51 @@
-﻿var emailBodyContainerId = "emailBody";
-function initSingleEmail(email, emailBodyURL, staticHeight) {
-    $("#emailFrom").html(email.senderAddress);
-    $("#emailReceivedGMT").html(email.receivedGMT);
-    $("#emailSubject").html(email.subjectLine);
-    $("#emailData").show();
-    $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
-        $("#" + emailBodyContainerId).contents().find("html").html(data);
-        if (!staticHeight) {
-            setIframeHeight(emailBodyContainerId, 200);
-            updateIframeHeight(emailBodyContainerId);
-            setTimeout(function () { updateIframeHeight(emailBodyContainerId); }, 1000);
-        } else {
-            var newHeight = staticHeight - $("#emailDataTitle").height() - $("#emailDataSubject").height() - 120;
-            if ($("#" + emailBodyContainerId).height() != newHeight) {
-                setIframeHeight(emailBodyContainerId, newHeight);
-                var offset = $("#emailData").offset();
-                var offsetTop = offset.top > $(".nav.navbar-nav").height()+12 ? offset.top : $(".nav.navbar-nav").height()+12;
-                var width = $("#emailData").width();
-                $("#emailData").css({ 'position': 'fixed', 'top': offsetTop, 'left': offset.left, 'width': width });
+﻿var singleEmailHelper = {
+    emailBodyContainerId : "emailBody",
+    init: function (email, emailBodyURL, staticHeight) {
+        var self = this;
+        self.updateControls(email);
+        $("#emailData").show();
+        $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
+            $("#" + self.emailBodyContainerId).contents().find("html").html(data);
+            if (!staticHeight) {
+                self.setBodyHeight(self.emailBodyContainerId, 200);
+                self.updateBodyHeight(self.emailBodyContainerId);
+                setTimeout(function () { self.updateBodyHeight(self.emailBodyContainerId); }, 1000);
+            } else {
+                var newHeight = staticHeight - $("#emailDataTitle").height() - $("#emailDataSubject").height() - 120;
+                if ($("#" + self.emailBodyContainerId).height() != newHeight) {
+                    self.setBodyHeight(self.emailBodyContainerId, newHeight);
+                    var offset = $("#emailData").offset();
+                    var offsetTop = offset.top > $(".nav.navbar-nav").height() + 12 ? offset.top : $(".nav.navbar-nav").height() + 12;
+                    var width = $("#emailData").width();
+                    $("#emailData").css({ 'position': 'fixed', 'top': offsetTop, 'left': offset.left, 'width': width });
+                }
             }
-        }
-    });
-}
-
-function updateIframeHeight(id)
-{
-    setIframeHeight(id, $("#"+id).contents().find("html").height())
-}
-
-function setIframeHeight(id, value)
-{
-    $("#" + id).height(value);
-}
-
-function hideSingleEmail() {
-    $("#emailData").hide();
-}
-
-function hideSingleEmailButtons() {
-    $("#emailDataButtons").hide();
+        });
+    },
+    updateBodyHeight: function (id) {
+        this.setBodyHeight(id, $("#" + id).contents().find("html").height())
+    },
+    setBodyHeight: function (id, value) {
+        $("#" + id).height(value);
+    },
+    hide: function () {
+        $("#emailData").hide();
+    },
+    hideButtons: function () {
+        $("#emailDataButtons").hide();
+    },
+    map: function (data) {
+        return {
+            "senderAddress": data.SenderAddress,
+            "receivedGMT": data.ReceivedGMT,
+            "subjectLine": data.SubjectLine,
+            "id": data.ID
+        };
+    },
+    updateControls: function (email) {
+        $("#emailFrom").html(email.senderAddress);
+        $("#emailReceivedGMT").html(email.receivedGMT);
+        $("#emailSubject").html(email.subjectLine);
+        $("#singleEmailPermalink").attr("href", $("#singleEmailPermalink").attr("data-baseaddress") + "?id=" + email.id);
+    }
 }

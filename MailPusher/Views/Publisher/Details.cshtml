@@ -119,6 +119,14 @@
                         title: "Sent",
                         sortable: true,
                         searchable: false
+                    },
+                    {
+                        name: 'btns',
+                        data: null,
+                        title: '',
+                        sortable: false,
+                        searchable: false,
+                        defaultContent: "<div class='btnTD'></div><a class='emailPermalink' href='#' title='open in new window'><i class='fa fa-link'></i> </a>",
                     }
                 ],
                 "iDisplayLength": 100,
@@ -140,33 +148,40 @@
 
             function initButtons() {
                 var table = $('#myTable').DataTable();
+                $(".emailPermalink").click(function(){
+                    var table = $('#myTable').DataTable();
+                    window.open('@Url.Action("Index", "Email")' + '?id=' + table.row($(this).parents('tr')).data().id, '_blank')
+                });
 
-                $("#myTable tr").click(function () {
-                    //INIT
-                    var rowData =table.row(this).data();
-                    initSingleEmail(rowData,'@Url.Action("GetEmailBody", "Email")', staticEmailContainerHeight);
+                $("#myTable td").click(function(){
+                    if(!$(this).find("div.btnTD").length)
+                    {
+                        //INIT
+                        var rowData =table.row(this).data();
+                        singleEmailHelper.init(rowData,'@Url.Action("GetEmailBody", "Email")', staticEmailContainerHeight);
 
-                    //STYLE
-                    $(".selectedTdItem").removeClass("selectedTdItem");
-                    $("#publisherEmailsContainer").removeClass("col-md-12").addClass("col-md-3");
-                    $("#myTableContainer").height($('#myTable').height()+200);
-                    $(this).addClass('selectedTdItem');
-                    $(".dataTables_filter .form-control").addClass('full-width-important');
+                        //STYLE
+                        $(".selectedTdItem").removeClass("selectedTdItem");
+                        $("#publisherEmailsContainer").removeClass("col-md-12").addClass("col-md-3");
+                        $("#myTableContainer").height($('#myTable').height()+200);
+                        $(this).parent("tr").addClass('selectedTdItem');
+                        $(".dataTables_filter .form-control").addClass('full-width-important');
 
-                    //FOCUS
-                    if(!Utils.isElementInView(this)){
-                        var rowpos = $(this).offset();
-                        $(window).scrollTop(rowpos.top-200);
+                        //FOCUS
+                        if(!Utils.isElementInView(this)){
+                            var rowpos = $(this).offset();
+                            $(window).scrollTop(rowpos.top-200);
+                        }
                     }
                 });
             }
             $("#backToEmailsView").click(function(){
-                var selectedRow = $(".selectedTdItem");
+                var selectedRow = $(".selectedTdItem").parent("tr");
 
                 $("#publisherEmailsContainer").removeClass("col-md-3").addClass("col-md-12");
                 $(".dataTables_filter .form-control").removeClass('full-width-important');
 
-                hideSingleEmail();
+                singleEmailHelper.hide();
                 if(!Utils.isElementInView(selectedRow)){
                     var rowpos = selectedRow.offset();
                     $(window).scrollTop(rowpos.top-200);

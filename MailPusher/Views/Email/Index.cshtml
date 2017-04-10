@@ -1,0 +1,17 @@
+﻿@model MailPusher.Models.Email
+@{
+    ViewBag.Title = "Email -" + Model.ID;
+}
+
+@Html.Partial("Custom/SingleEmail")
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            singleEmailHelper.init(
+                singleEmailHelper.map(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model))),
+                '@Url.Action("GetEmailBody", "Email")');
+            singleEmailHelper.hideButtons();
+        });
+    </script>
+}

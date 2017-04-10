@@ -11,6 +11,11 @@ namespace MailPusher.Helpers
 {
     public class EmailHelper
     {
+        public Email GetEmail(int emailID)
+        {
+            EmailRepo repo = new EmailRepo();
+            return Map(repo.Get(emailID));
+        }
         public List<Email> GetEmails(int start, int length, string searchCriteria, int publisherID, string from, string to)
         {
             EmailRepo repo = new EmailRepo();

@@ -642,10 +642,10 @@
     <Content Include="Views\Publisher\Unconfirmed.cshtml" />
     <Content Include="Views\Shared\Custom\PublisherEmailFilter.cshtml" />
     <Content Include="Views\Publisher\Edit.cshtml" />
+    <Content Include="Views\Email\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Email\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
