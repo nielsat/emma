@@ -16,16 +16,22 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3" style="font-weight:bold">Domain</div>
-                        <div class="col-md-3"><a href="@Model.Domain" target="_blank"> @Model.Domain</a></div>
-                        <div class="col-md-3" style="font-weight:bold">Language</div>
-                        <div class="col-md-3">@Model.Language</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3" style="font-weight:bold">Category</div>
-                        <div class="col-md-3">@Model.Category</div>
-                        <div class="col-md-3" style="font-weight:bold">State</div>
-                        <div class="col-md-3">@Model.FormatedStatus</div>
+                        <div class="col-md-3">
+                            <label>Domain</label><br />
+                            <a href="@Model.Domain" target="_blank"> @Model.Domain</a>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Language</label><br />
+                            @Model.Language
+                        </div>
+                        <div class="col-md-3">
+                            <label>Category</label><br />
+                            @Model.Category
+                        </div>
+                        <div class="col-md-3">
+                            <label>State</label><br />
+                            @Model.FormatedStatus
+                        </div>
                     </div>
                 </div>
             </div>
