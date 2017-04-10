@@ -9,12 +9,12 @@
 
 <div class="x_panel">
     <div class="x_title">
-        <h2>Publisher: <label id="publisherName"></label> </h2>
+        <h2 class="subscribeDetails">Publisher: <label id="publisherName"></label> </h2>
         <div class="nav navbar-right panel_toolbox filterWithLongText" id="countryFilterContainer">
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="x_content">
+    <div class="x_content subscribeDetails">
         <div class="form-horizontal form-label-left">
             <input type="hidden" id="publisherId" />
             <div class="form-group">
@@ -76,11 +76,7 @@
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id": $("#publisherId").val() }).done(function (result) {
                 if(result===true)
                 {
-                    $.notify('Successfully changed publisher state to ' + newStatus,
-                        {
-                            type: 'success',
-                            placement:{align:'center'}
-                        });
+                    notifyWrapper.success('Successfully changed publisher state to ' + newStatus);
                     if(!isSpecificPublisherState()){
                         injectedCountryFilter.countryChanged();
                     };
@@ -102,11 +98,22 @@
         }
 
         function InitPublisher(publisher) {
-            $("#publisherName").html(publisher.PublisherName);
-            $("#publisherDomain").text(publisher.Domain);
-            $("#publisherDomain").attr("href", publisher.Domain)
-            $("#publisherEmail").val(publisher.SubscriberEmail)
-            $("#publisherId").val(publisher.PublisherId);
+            var badResult =publisher.PublisherId==="0";
+            if(badResult)
+            {
+                $(".subscribeDetails").hide();
+                var errorMsg = 'No subscriptions in State - @MailPusher.Common.Enums.PublisherStatus.None.';
+                errorMsg+= !isSpecificPublisherState()?'Try different country':'';
+                notifyWrapper.error(errorMsg);
+            }
+            else{
+                $(".subscribeDetails").show();
+                $("#publisherName").html(publisher.PublisherName);
+                $("#publisherDomain").text(publisher.Domain);
+                $("#publisherDomain").attr("href", publisher.Domain)
+                $("#publisherEmail").val(publisher.SubscriberEmail)
+                $("#publisherId").val(publisher.PublisherId);
+            }
         }
 
         InitPublisher(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)))

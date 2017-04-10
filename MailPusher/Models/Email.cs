@@ -14,5 +14,6 @@ namespace MailPusher.Models
         public string SenderName { get; set; }
         public string SenderAddress { get; set; }
         public string Copy { get; set; }
+        public string Language { get; set; }
     }
 }

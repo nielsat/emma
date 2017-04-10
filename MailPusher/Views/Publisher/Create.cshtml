@@ -131,12 +131,7 @@
                 $("#selectNACECloseBtn").click();
             }
             else{
-                $.notify('Please select NACE',
-                       {
-                           type: 'danger',
-                           placement:{align:'center'},
-                           z_index:1100
-                       });
+                notifyWrapper.error('Please select NACE');
             }
         });
     </script>

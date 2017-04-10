@@ -54,13 +54,13 @@ namespace MailPusher.Helpers
         public Publisher GetFirstPublisherByCountryAndStatus(string countryCode, PublisherStatus publisherStatus)
         {
             PublisherRepo repo = new PublisherRepo();
-            return Map(repo.GetFirstPublisherByCountryAndStatus(countryCode, publisherStatus));
+            return Map(repo.GetFirstPublisherByCountryAndStatus(countryCode, publisherStatus), countryCode); ;
         }
 
         public Publisher GetPublisherByCountryAndStatus(string countryCode, PublisherStatus status, Direction direction, int publisherId)
         {
             PublisherRepo repo = new PublisherRepo();
-            return Map(repo.GetPublisherByCountryAndStatus(countryCode, status, direction, publisherId));
+            return Map(repo.GetPublisherByCountryAndStatus(countryCode, status, direction, publisherId), countryCode);
         }
 
         public Publisher AddPublisher(Publisher newPublisher)
@@ -114,11 +114,14 @@ namespace MailPusher.Helpers
             return repo.Delete(publisherID);
         }
 
-        public Publisher Map(Repository.Models.Publisher publisher)
+        public Publisher Map(Repository.Models.Publisher publisher, string language ="")
         {
             if (publisher == null)
             {
-                return null;
+                return new Publisher()
+                {
+                    Language = language
+                };
             }
             return new Publisher()
             {

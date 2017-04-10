@@ -2,11 +2,13 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title" id="emailDataTitle">
-                <h2>
+                <h2 class="singleEmailDataContainer">
                     From:
                     <span id="emailFrom"></span>
                     <small id="emailReceivedGMT"></small>
                 </h2>
+                <div class="nav navbar-right panel_toolbox filterWithLongText" id="singleEmailFilterContainer">
+                </div>
                 <ul class="nav navbar-right panel_toolbox" id="emailDataButtons">
                     <li>
                         <a href="#" data-baseAddress="@Url.Action("Index","Email")" title="open in new window" target="_blank" id="singleEmailPermalink"><i class="fa fa-link"></i></a>
@@ -17,7 +19,7 @@
                 </ul>
                 <div class="clearfix"></div>
             </div>
-            <div class="x_content">
+            <div class="x_content singleEmailDataContainer">
                 <div class="row" id="emailDataSubject">
                     <div class="col-md-12">
                         <h3 class="prod_title">

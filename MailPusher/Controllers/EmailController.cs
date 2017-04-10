@@ -2,6 +2,7 @@
 using DataTables.AspNet.Mvc5;
 using MailPusher.Common.Enums;
 using MailPusher.Helpers;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,10 @@ namespace MailPusher.Controllers
 
         public ActionResult GetFirstPublisherEmail(string countryCode, PublisherStatus status)
         {
+            //TODO move this to user settings, don't make during search!!
+            UserSettingsHelper usHelper = new UserSettingsHelper();
+            usHelper.Update(User.Identity.GetUserId(), countryCode);
+            //TODO move this to user settings, don't make during search!!
             EmailHelper helper = new EmailHelper();
             return Json(helper.GetEmailByPublisherCountryAndStatus(countryCode, status),JsonRequestBehavior.AllowGet);
         }

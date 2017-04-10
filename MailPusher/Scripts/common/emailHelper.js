@@ -1,5 +1,6 @@
 ﻿var singleEmailHelper = {
-    emailBodyContainerId : "emailBody",
+    emailBodyContainerId: "emailBody",
+    singleEmailFilterContainerId:'singleEmailFilterContainer',
     init: function (email, emailBodyURL, staticHeight) {
         var self = this;
         self.updateControls(email);
@@ -47,5 +48,11 @@
         $("#emailReceivedGMT").html(email.receivedGMT);
         $("#emailSubject").html(email.subjectLine);
         $("#singleEmailPermalink").attr("href", $("#singleEmailPermalink").attr("data-baseaddress") + "?id=" + email.id);
+    },
+    hideData: function () {
+        $(".singleEmailDataContainer").hide();
+    },
+    showData: function () {
+        $(".singleEmailDataContainer").show();
     }
 }

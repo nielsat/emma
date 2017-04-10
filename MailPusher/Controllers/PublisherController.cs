@@ -101,9 +101,18 @@ namespace MailPusher.Controllers
         public ActionResult Unconfirmed(int? publisherId)
         {
             EmailHelper helper = new EmailHelper();
-            return View(publisherId.HasValue?
-                helper.GetFirstPublisherEmail(PublisherStatus.Subscribed, publisherId.Value):
-                helper.GetFirstPublisherEmail(PublisherStatus.Subscribed));
+            Email result = new Email();
+            if (!publisherId.HasValue)
+            {
+                UserSettingsHelper usHelper = new UserSettingsHelper();
+                string userLanguage = usHelper.GetUserLanguage(User.Identity.GetUserId());
+                result = helper.GetEmailByPublisherCountryAndStatus(userLanguage, PublisherStatus.Subscribed);
+            }
+            else
+            {
+                result = helper.GetFirstPublisherEmail(PublisherStatus.Subscribed, publisherId.Value);
+            }
+            return View(result);
         }
 
         private void InitLists() {

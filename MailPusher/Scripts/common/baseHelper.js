@@ -46,3 +46,21 @@ var Utils = {
         }
     }
 };
+
+var notifyWrapper = {
+    error: function (msg) {
+        $.notify(msg,
+                       {
+                           type: 'danger',
+                           placement: { align: 'center' },
+                           z_index: 1100
+                       });
+    },
+    success: function (msg) {
+        $.notify(msg,
+                        {
+                            type: 'success',
+                            placement: { align: 'center' }
+                        });
+    }
+}

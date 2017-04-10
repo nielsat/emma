@@ -4,9 +4,8 @@
 }
 
 <input type="hidden" id="publisherId" />
-@Html.Partial("Custom/PublisherEmailFilter", Model)
 @Html.Partial("Custom/SingleEmail")
-<div class="form-group">
+<div class="form-group unconfirmedBtns">
     <div class="col-md-9">
         <button class="btn btn-success" onclick="ChangePublisherStatus('@MailPusher.Common.Enums.PublisherStatus.Confirmed')">
             I have now confirmed the publisher's newsletter
@@ -25,6 +24,20 @@
         });
 
         function updateEmailData(data){
+            var badResult = data.PublisherID=="0";
+            if(badResult)
+            {
+                singleEmailHelper.hideData();
+                var errorMsg = 'No subscriptions in State - @MailPusher.Common.Enums.PublisherStatus.Subscribed.';
+                errorMsg+= !isSpecificPublisherState()?'Try different country':'';
+                notifyWrapper.error(errorMsg);
+                $(".unconfirmedBtns").hide();
+            }
+            else{
+                singleEmailHelper.showData();
+                $(".unconfirmedBtns").show();
+            }
+
             $("#publisherId").val(data.PublisherID);
             singleEmailHelper.init(singleEmailHelper.map(data),
                 '@Url.Action("GetEmailBody", "Email")');
@@ -34,32 +47,32 @@
             $.post('@Url.Action("ChangePublisherStatus", "Publisher")', { "status": newStatus, "id":  $("#publisherId").val() }).done(function (result) {
                 if(result===true)
                 {
-                    $.notify('Successfully changed publisher state to ' + newStatus, 
-                        {
-                            type: 'success',
-                            placement:{align:'center'}
-                        });
-                    publisherFilter.getFirst();
+                    notifyWrapper.success('Successfully changed publisher state to ' + newStatus);
+                    if(!isSpecificPublisherState()){
+                        injectedCountryFilter.countryChanged();
+                    };
                 }
             });
         }
 
-        publisherFilter.init(
-            {
-                'onPublisherChanged': function (data) { updateEmailData(data); },
-                'getFirstUrl': '@Url.Action("GetFirstPublisherEmail", "Email")',
-                'getNextUrl': '@Url.Action("GetNextPublisherEmail", "Email")',
-                'getPrevUrl': '@Url.Action("GetPrevPublisherEmail", "Email")',
-                'extendRequestParams': function (data) {
-                    data.status = @((int)MailPusher.Common.Enums.PublisherStatus.Subscribed);
-                    data.publisherId = $("#publisherId").val();
-                    return data;
-                }
-            });
-
         $(document).ready(function(){
-            if(isSpecificPublisherState()) {
-                publisherFilter.hide();
+            if(!isSpecificPublisherState()) {
+                injectedCountryFilter.init({
+                    countryFilterContainerID: singleEmailHelper.singleEmailFilterContainerId,
+                    selectedCountryCode:'@Model.Language',
+                    onCountryChanged: function (countryCode) {
+                        var requestData = {
+                            'countryCode': countryCode,
+                            'status':@((int)MailPusher.Common.Enums.PublisherStatus.Subscribed),
+                            'publisherId': $("#publisherId").val(),
+                        };
+                        if (!!requestData) {
+                            $.get('@Url.Action("GetFirstPublisherEmail", "Email")', requestData).done(function (data) {
+                                updateEmailData(data);
+                            });
+                        }
+                    },
+                });
             };
             singleEmailHelper.hideButtons();
         });

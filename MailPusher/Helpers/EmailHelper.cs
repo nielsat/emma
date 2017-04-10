@@ -51,10 +51,12 @@ namespace MailPusher.Helpers
             return Map(repo.GetFirstPublisherEmail(status, publisherId));
         }
 
-        public Email Map(Repository.Models.Email email)
+        public Email Map(Repository.Models.Email email, string language = "")
         {
             if (email == null) {
-                return new Email();
+                return new Email() {
+                    Language = language
+                };
             }
             return new Email()
             {
@@ -64,7 +66,8 @@ namespace MailPusher.Helpers
                 ReceivedGMT = FormatHelper.ConvertDateToString(email.ReceivedGMT),
                 SenderAddress = email.SenderAddress,
                 SenderName = email.SenderName,
-                SubjectLine = email.SubjectLine
+                SubjectLine = email.SubjectLine,
+                Language = language
             };
         }
 
@@ -94,19 +97,19 @@ namespace MailPusher.Helpers
         public Email GetEmailByPublisherCountryAndStatus(string countryCode, PublisherStatus status)
         {
             EmailRepo repo = new EmailRepo();
-            return Map(repo.GetEmailByPublisherCountryAndStatus(countryCode, status));
+            return Map(repo.GetEmailByPublisherCountryAndStatus(countryCode, status), countryCode); ;
         }
 
         public Email GetNextEmailByPublisherCountryAndStatus(string countryCode, PublisherStatus status, int publisherId)
         {
             EmailRepo repo = new EmailRepo();
-            return Map(repo.GetNextEmailByPublisherCountryAndStatus(countryCode, status, publisherId));
+            return Map(repo.GetNextEmailByPublisherCountryAndStatus(countryCode, status, publisherId), countryCode);
         }
 
         public Email GetPrevEmailByPublisherCountryAndStatus(string countryCode, PublisherStatus status, int publisherId)
         {
             EmailRepo repo = new EmailRepo();
-            return Map(repo.GetPrevEmailByPublisherCountryAndStatus(countryCode, status, publisherId));
+            return Map(repo.GetPrevEmailByPublisherCountryAndStatus(countryCode, status, publisherId), countryCode);
         }
     }
 }
