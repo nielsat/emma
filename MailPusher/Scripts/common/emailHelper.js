@@ -44,7 +44,7 @@
         };
     },
     updateControls: function (email) {
-        $("#emailFrom").html(email.senderAddress);
+        $("#emailFrom").html(email.senderAddress.replace(/"/g, ''));
         $("#emailReceivedGMT").html(email.receivedGMT);
         $("#emailSubject").html(email.subjectLine);
         $("#singleEmailPermalink").attr("href", $("#singleEmailPermalink").attr("data-baseaddress") + "?id=" + email.id);
