@@ -103,14 +103,14 @@
                 }
             });
             var triggerDrawUpdate = true;
-            $('#myTable').on('draw.dt', function (source) {
+            $('#myTable').on('draw.dt', function (source, settings) {
                 if(triggerDrawUpdate)
                 {
                     changeCountryNames();
                     addCustomFilters();
                     showButtonsBasedOnState();
                     initButtons();
-                    changeGridStyle();
+                    changeGridStyle(settings);
                     triggerDrawUpdate = true;
                 }
             });
@@ -130,7 +130,7 @@
                 });
             }
 
-            function changeGridStyle()
+            function changeGridStyle(settings)
             {
                 if($(".subscribeBtn.hidden").length!=$(".subscribeBtn").length
                     ||$(".confirmSubscribtionBtn.hidden").length!=$(".confirmSubscribtionBtn").length){
@@ -138,6 +138,7 @@
                 }
                 gridHelper.updateContainerHeight('myTableContainer','myTable',200);
                 gridHelper.changeTdCursorToPointer('myTable','btnTD');
+                gridHelper.hidePginationIfOnePage('myTable',settings);
             }
 
             function showButtonsBasedOnState()
@@ -228,6 +229,7 @@
             
 
             $('div.dataTables_filter input').addClass('form-control');
+            gridHelper.hidePginationIfOnePage('myTable');
         });
     </script>
     }

@@ -135,15 +135,16 @@
                     "sSearch": "Search emails by subject line:&nbsp;&nbsp;"
                 }
             });
-            $('#myTable').on('draw.dt', function () {
+            $('#myTable').on('draw.dt', function (e, settings) {
                 initButtons();
-                changeGridStyle();
+                changeGridStyle(settings);
             });
 
-            function changeGridStyle()
+            function changeGridStyle(settings)
             {
                 gridHelper.updateContainerHeight('myTableContainer','myTable', 200);
                 gridHelper.changeTdCursorToPointer('myTable','noClass');
+                gridHelper.hidePginationIfOnePage('myTable',settings);
             }
 
             function initButtons() {
