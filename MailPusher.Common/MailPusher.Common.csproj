@@ -45,10 +45,16 @@
     <Compile Include="Enums\PublisherStatus.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Helpers\AppSettingsHelper.cs" />
+    <Compile Include="Helpers\DateRangeHelper.cs" />
     <Compile Include="Helpers\FormatHelper.cs" />
+    <Compile Include="Models\DateRange.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\EmailHeader.cs" />
+    <Compile Include="Models\Metrics.cs" />
     <Compile Include="Models\PublisherStats.cs" />
+    <Compile Include="Models\Reports\TimeChart.cs" />
+    <Compile Include="Models\Reports\TimeChartLine.cs" />
+    <Compile Include="Models\Reports\TimeChartPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

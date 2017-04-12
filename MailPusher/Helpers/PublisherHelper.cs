@@ -1,5 +1,7 @@
 ﻿using MailPusher.Common.Enums;
 using MailPusher.Common.Helpers;
+using MailPusher.Common.Models;
+using MailPusher.Common.Models.Reports;
 using MailPusher.Models;
 using MailPusher.Repository.Repositories;
 using System;
@@ -11,12 +13,14 @@ namespace MailPusher.Helpers
 {
     public class PublisherHelper
     {
-        public int GetTotalRecords() {
+        public int GetTotalRecords()
+        {
             PublisherRepo repo = new PublisherRepo();
             return repo.GetTotalRecords();
         }
 
-        public int GetTotalFilteredRecords(string searchCriteria, PublisherStatus statuses, bool isPotentiallyCancelled) {
+        public int GetTotalFilteredRecords(string searchCriteria, PublisherStatus statuses, bool isPotentiallyCancelled)
+        {
             PublisherRepo repo = new PublisherRepo();
             return repo.GetTotalFilteredRecords(searchCriteria, statuses, isPotentiallyCancelled);
         }
@@ -40,7 +44,8 @@ namespace MailPusher.Helpers
             return publishers;
         }
 
-        public Publisher GetPublisher(int publisherId) {
+        public Publisher GetPublisher(int publisherId)
+        {
             PublisherRepo repo = new PublisherRepo();
             return Map(repo.GetPublisher(publisherId));
         }
@@ -80,7 +85,7 @@ namespace MailPusher.Helpers
         public List<Publisher> Map(List<Repository.Models.Publisher> sourcePublishers)
         {
             List<Publisher> result = new List<Publisher>();
-            foreach(var publisher in sourcePublishers)
+            foreach (var publisher in sourcePublishers)
             {
                 result.Add(Map(publisher));
             }
@@ -104,7 +109,7 @@ namespace MailPusher.Helpers
                 Name = publisher.Name,
                 Status = publisher.Status,
                 CreatorId = publisher.CreatorId,
-                UpdaterId=publisher.UpdaterId
+                UpdaterId = publisher.UpdaterId
             };
         }
 
@@ -114,7 +119,7 @@ namespace MailPusher.Helpers
             return repo.Delete(publisherID);
         }
 
-        public Publisher Map(Repository.Models.Publisher publisher, string language ="")
+        public Publisher Map(Repository.Models.Publisher publisher, string language = "")
         {
             if (publisher == null)
             {
@@ -131,11 +136,33 @@ namespace MailPusher.Helpers
                 NACEID = publisher.NACEID,
                 Name = publisher.Name,
                 Status = publisher.Status,
-                Category = publisher.NACE==null? string.Empty: publisher.NACE.Description,
+                Category = publisher.NACE == null ? string.Empty : publisher.NACE.Description,
                 CreatorId = publisher.CreatorId,
                 UpdaterId = publisher.UpdaterId,
-                LastReceivedEmail = publisher.LastReceivedEmail.HasValue? FormatHelper.ConvertDateToString(publisher.LastReceivedEmail.Value) :"",
+                LastReceivedEmail = publisher.LastReceivedEmail.HasValue ? FormatHelper.ConvertDateToString(publisher.LastReceivedEmail.Value) : "",
                 FormatedStatus = FormatHelper.GetFormtedStatus(publisher.Status, publisher.StatusChanged)
+            };
+        }
+        public Metrics GetMetrics()
+        {
+            PublisherRepo repo = new PublisherRepo();
+            return repo.GetMetrics();
+        }
+
+        public TimeChart GetConfirmedSubscriptionsChart()
+        {
+            PublisherRepo repo = new PublisherRepo();
+            var points = repo.GetConfirmedSubscriptionsByDate();
+            return new TimeChart()
+            {
+                Line = new TimeChartLine()
+                {
+                    Points = points,
+                    Title = "Confirmed subscriptions",
+                    AxesLabel = "",
+                    SeriesAxis = "Number"
+                },
+                Title = "Confirmed subscriptions"
             };
         }
     }

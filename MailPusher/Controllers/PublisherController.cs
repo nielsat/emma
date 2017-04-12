@@ -115,6 +115,12 @@ namespace MailPusher.Controllers
             return View(result);
         }
 
+        public ActionResult GetMetrics()
+        {
+            PublisherHelper helper = new PublisherHelper();
+            return Json(helper.GetMetrics(), JsonRequestBehavior.AllowGet);
+        }
+
         private void InitLists() {
             NACEHelper helper = new NACEHelper();
             var naceData = helper.GetAll();
@@ -126,6 +132,11 @@ namespace MailPusher.Controllers
             PublisherHelper helper = new PublisherHelper();
             helper.Delete(publisherID);
             return Content("ok");
+        }
+
+        public ActionResult GetConfirmedSubscriptionsChartData() {
+            PublisherHelper helper = new PublisherHelper();
+            return Json(helper.GetConfirmedSubscriptionsChart(), JsonRequestBehavior.AllowGet);
         }
     }
 }

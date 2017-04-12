@@ -13,10 +13,6 @@ namespace MailPusher.Controllers
     {
         public ActionResult Index()
         {
-            using (MailPusherDBContext context = new MailPusherDBContext())
-            {
-                var emails = context.Emails.ToList();
-            }
             return View();
         }
 

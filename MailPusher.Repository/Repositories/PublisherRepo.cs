@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using MailPusher.Common.Models;
+using MailPusher.Common.Helpers;
+using MailPusher.Common.Models.Reports;
+using System.Data.Entity.Core.Objects;
 
 namespace MailPusher.Repository.Repositories
 {
@@ -219,6 +222,44 @@ namespace MailPusher.Repository.Repositories
                     ReceivedEmails = group.Count()
                 });
                 result.AddRange(resultQuery);
+            }
+            return result;
+        }
+
+        public Metrics GetMetrics()
+        {
+            Metrics result = new Metrics();
+            using (MailPusherDBContext context = new MailPusherDBContext())
+            {
+                result.TotalConfirmedSubscriptions = context.Publishers.Where(x => x.Status == PublisherStatus.Confirmed).Count();
+                result.TotalSubscriptions = context.Publishers.Where(x => (x.Status & (PublisherStatus.Confirmed | PublisherStatus.Subscribed)) > 0).Count();
+
+                DateRange lastMonthRange = DateRangeHelper.GetLastMonth();
+                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(x => x.StatusChanged!=null && x.StatusChanged >= lastMonthRange.Start.Date && x.StatusChanged <= lastMonthRange.End.Date && x.Status == PublisherStatus.Confirmed).Count();
+
+                DateRange lastWeekRange = DateRangeHelper.GetLastWeek();
+                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(x => x.StatusChanged != null && x.StatusChanged >= lastWeekRange.Start.Date && x.StatusChanged <= lastWeekRange.End.Date && x.Status == PublisherStatus.Confirmed).Count();
+
+                DateRange currentMonthRange = DateRangeHelper.GetCurrentMonth();
+                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(x => x.StatusChanged != null && x.StatusChanged >= currentMonthRange.Start.Date && x.Status == PublisherStatus.Confirmed).Count();
+
+                DateRange currentWeekRange = DateRangeHelper.GetCurrentWeek();
+                result.ConfirmedSubscriptionsThisWeek = context.Publishers.Where(x => x.StatusChanged != null && x.StatusChanged >= currentWeekRange.Start.Date && x.Status == PublisherStatus.Confirmed).Count();
+            }
+            return result;
+        }
+
+        public List<TimeChartPoint> GetConfirmedSubscriptionsByDate()
+        {
+            List<TimeChartPoint> result = new List<TimeChartPoint>();
+            using (MailPusherDBContext context = new MailPusherDBContext())
+            {
+                var query = context.Publishers.Where(x => x.StatusChanged.HasValue && x.Status == PublisherStatus.Confirmed).OrderBy(x=>x.StatusChanged).GroupBy(x => DbFunctions.TruncateTime(x.StatusChanged.Value)).Select(group => new TimeChartPoint()
+                {
+                    Date = group.Key.Value,
+                    Value = group.Count()
+                });
+                result = query.ToList(); 
             }
             return result;
         }

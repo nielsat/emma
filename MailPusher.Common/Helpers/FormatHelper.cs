@@ -28,6 +28,12 @@ namespace MailPusher.Common.Helpers
             return string.Format("{0} {1:yyyy.MM.dd} at {1:hh:mm} GMT", prefix, utcDate);
         }
 
+        public static string ConvertDateToShortString(DateTime date)
+        {
+            DateTime utcDate = date.ToUniversalTime();
+            return string.Format("{0:yyyy.MM.dd}", utcDate);
+        }
+
         public static string GetFormtedStatus(PublisherStatus status, DateTime? changed)
         {
             string datePart = string.Empty;
@@ -36,6 +42,13 @@ namespace MailPusher.Common.Helpers
                 datePart = string.Format("({0:yyyy-MM-dd})", changed.Value.ToUniversalTime());
             }
             return string.Format("{0} {1}", status.ToString(), datePart);
+        }
+
+        public static double GetJavascriptDate(DateTime date)
+        {
+            return date.ToUniversalTime()
+               .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))
+               .TotalMilliseconds;
         }
     }
 }
