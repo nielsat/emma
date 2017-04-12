@@ -7,7 +7,6 @@ using System.Data.Entity;
 using MailPusher.Common.Models;
 using MailPusher.Common.Helpers;
 using MailPusher.Common.Models.Reports;
-using System.Data.Entity.Core.Objects;
 
 namespace MailPusher.Repository.Repositories
 {
