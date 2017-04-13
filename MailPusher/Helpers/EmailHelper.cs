@@ -16,10 +16,10 @@ namespace MailPusher.Helpers
             EmailRepo repo = new EmailRepo();
             return Map(repo.Get(emailID));
         }
-        public List<Email> GetEmails(int start, int length, string searchCriteria, int publisherID, string from, string to)
+        public List<Email> GetEmails(int start, int length, string searchCriteria, int publisherID, string from, string to, List<Common.Models.SortColumn> sorting)
         {
             EmailRepo repo = new EmailRepo();
-            return Map(repo.GetPublisherEmails(start, length, searchCriteria, publisherID, GetDate(from), GetDate(to)));
+            return Map(repo.GetPublisherEmails(start, length, searchCriteria, publisherID, GetDate(from), GetDate(to), sorting));
         }
         protected DateTime? GetDate(string date)
         {

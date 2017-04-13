@@ -44,6 +44,8 @@
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\PublisherStatus.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\SortColumnName.cs" />
+    <Compile Include="Enums\SortingOrder.cs" />
     <Compile Include="Helpers\AppSettingsHelper.cs" />
     <Compile Include="Helpers\DateRangeHelper.cs" />
     <Compile Include="Helpers\FormatHelper.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="Models\Reports\TimeChart.cs" />
     <Compile Include="Models\Reports\TimeChartLine.cs" />
     <Compile Include="Models\Reports\TimeChartPoint.cs" />
+    <Compile Include="Models\SortColumn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

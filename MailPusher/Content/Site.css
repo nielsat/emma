@@ -65,3 +65,6 @@
 #singleEmailPermalink {
     margin-left:100px;
 }
+.sorting, .sorting_asc, .sorting_desc {
+    cursor:pointer !important;
+}

@@ -82,18 +82,22 @@ namespace MailPusher.Repository.Repositories
             return result;
         }
 
-        public List<Email> GetPublisherEmails(int start, int length, string searchCriteria, int publisherID, DateTime? from, DateTime? to)
+        public List<Email> GetPublisherEmails(int start, int length, string searchCriteria, int publisherID, DateTime? from, DateTime? to, List<Common.Models.SortColumn> sorting)
         {
             List<Email> result = new List<Email>();
             using (var context = new MailPusherDBContext())
             {
-                var query = AddFilters(context, searchCriteria, publisherID, from, to);
-                result = query.OrderBy(x => x.ID).Skip(start).Take(length).ToList();
+                var query = AddFilters(context, searchCriteria, publisherID, from, to, sorting);
+                if (sorting == null || sorting.Count == 0)
+                {
+                    query = query.OrderByDescending(x => x.ReceivedGMT);
+                }
+                result = query.Skip(start).Take(length).ToList();
             }
             return result;
         }
 
-        protected IQueryable<Email> AddFilters(MailPusherDBContext context, string searchCriteria, int publisherID, DateTime? from, DateTime? to) {
+        protected IQueryable<Email> AddFilters(MailPusherDBContext context, string searchCriteria, int publisherID, DateTime? from, DateTime? to, List<Common.Models.SortColumn> sorting=null) {
             var query = context.Emails.Where(x => x.PublisherID == publisherID);
             if (!string.IsNullOrEmpty(searchCriteria))
             {
@@ -106,6 +110,20 @@ namespace MailPusher.Repository.Repositories
             if (to.HasValue)
             {
                 query = query.Where(x => x.ReceivedGMT < to.Value);
+            }
+            if (sorting != null)
+            {
+                foreach (var sort in sorting)
+                {
+                    if (sort.SortColumnName == SortColumnName.SubjectLine)
+                    {
+                        query = sort.SortingOrder == SortingOrder.Ascending? query.OrderBy(x => x.SubjectLine): query.OrderByDescending(x=>x.SubjectLine);
+                    }
+                    if (sort.SortColumnName == SortColumnName.ReceivedGMT)
+                    {
+                        query = sort.SortingOrder == SortingOrder.Ascending ? query.OrderBy(x => x.ReceivedGMT) : query.OrderByDescending(x => x.ReceivedGMT);
+                    }
+                }
             }
             return query;
         }
