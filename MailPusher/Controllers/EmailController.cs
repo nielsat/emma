@@ -77,5 +77,11 @@ namespace MailPusher.Controllers
             EmailHelper helper = new EmailHelper();
             return Json(helper.GetPrevEmailByPublisherCountryAndStatus(countryCode, status, publisherId), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetPublisherEmailsTotal(int publisherId)
+        {
+            EmailHelper helper = new EmailHelper();
+            return Json(helper.GetTotalRecords(publisherId), JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -15,7 +15,7 @@
 
 function FixNavigation() {
     var currentPathName = location.pathname + location.search;
-    $("a[href='" + currentPathName + "']").addClass("current-page");
+    $("a[href='" + currentPathName + "']").not(".site_title").addClass("current-page");
 };
 
 function GetURLParamPublisherStatuses() {
