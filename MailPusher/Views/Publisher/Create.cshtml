@@ -12,40 +12,40 @@
             </div>
             <div class="x_content">
                 <br>
-                <form class= "form-horizontal form-label-left">
+                <form class= "form-horizontal form-label-left" id="createPublisherForm">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Name">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="publisherName">
                             Name <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="publisherName" class="form-control col-md-7 col-xs-12" required = "required"/>
+                            <input type="text" id="publisherName" name="publisherName" class="form-control col-md-7 col-xs-12" required = "required"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Domain">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="publisherDomain">
                             Domain <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="publisherDomain" class="form-control col-md-7 col-xs-12" required="required" />
+                            <input type="text" id="publisherDomain" name="publisherDomain" class="form-control col-md-7 col-xs-12" required="required" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="Language" class="control-label col-md-3 col-sm-3 col-xs-12">
+                        <label for="publisherLanguage" class="control-label col-md-3 col-sm-3 col-xs-12">
                             Language <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select id="publisherLanguage" class="form-control col-md-7 col-xs-12" required="required"></select>
+                            <select id="publisherLanguage" name="publisherLanguage" class="form-control col-md-7 col-xs-12" required="required"></select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="NACEID" class="control-label col-md-3 col-sm-3 col-xs-12">
+                        <label for="publisherNACE" class="control-label col-md-3 col-sm-3 col-xs-12">
                             NACEID <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="row">
                                 <div class="col-md-9">
                                     <input type="hidden" id="publisherNACEid"/>
-                                    <input type="text" id="publisherNACE" disabled="disabled" class="form-control col-md-7 col-xs-12" />
+                                    <input type="text" id="publisherNACE" name="publisherNACE" readonly="readonly"  class="form-control col-md-7 col-xs-12" required="required"/>
                                 </div>
                                 <div class="col-md-3">
                                     <button id="showNaceTreeBtn" class="btn btn-default full-width" data-toggle="modal" data-target="#naceModal" type="button">Select</button>
@@ -86,30 +86,30 @@
 </div>
 
 @section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
     <link rel="stylesheet" type="text/css" href="~/Content/jstree/style.css" media="screen" />
     <script type="text/javascript" src="~/Scripts/jstree/jstree.min.js"></script>
     <script type="text/javascript">
-        $("#submitBtn").click(function () {
-            var requiredFormsValid = true;
-            $.each($('input[required]'), function (index, item) {
-                if ($(item).val() == '') {
-                    requiredFormsValid = false;
-                };
-            })
-            if (!requiredFormsValid) {
-                return false;
-            }
+        $(document).ready(function(){
+            $("#createPublisherForm").validate();
+        });
 
-            $.post('@Url.Action("Create", "Publisher")', {
-                'Name': $("#publisherName").val(),
-                'Domain': $("#publisherDomain").val(),
-                'Language': $("#publisherLanguage").val(),
-                'NACEID': $("#publisherNACEid").val(),
-            }).done(function (result) {
-                if (result === "ok") {
-                    window.location.href = '@Url.Action("Index", "Publisher")'
-                };
-            });
+        $("#submitBtn").click(function () {
+            $('#submitBtn').prop('disabled', true);
+            if($("#createPublisherForm").valid()){
+                $.post('@Url.Action("Create", "Publisher")', {
+                    'Name': $("#publisherName").val(),
+                    'Domain': $("#publisherDomain").val(),
+                    'Language': $("#publisherLanguage").val(),
+                    'NACEID': $("#publisherNACEid").val(),
+                }).done(function (result) {
+                    if (result === "ok") {
+                        window.location.href = '@Url.Action("Index", "Publisher")'
+                    };
+                });
+            }else{
+                $('#submitBtn').prop('disabled', false);
+            }
             return false;
         });
         initShortCountrySelect("publisherLanguage");
