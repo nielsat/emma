@@ -7,6 +7,7 @@
         $("#emailData").show();
         $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
             $("#" + self.emailBodyContainerId).contents().find("html").html(data);
+            $("#emailBody")[0].contentWindow.scrollTo(0, 0);
             if (!staticHeight) {
                 self.setBodyHeight(self.emailBodyContainerId, 200);
                 self.updateBodyHeight(self.emailBodyContainerId);
