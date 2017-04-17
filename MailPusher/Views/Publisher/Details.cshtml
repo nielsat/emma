@@ -2,13 +2,9 @@
 @{
     ViewBag.Title = Model.Name;
 }
-<div class="row" id="positionHelper">
-    <div class="col-md-3"></div>
-    <div class="col-md-9"></div>
-</div>
 <div class="row">
     <div class="col-md-12" id="publisherEmailsContainer">
-        <div class="row">
+        <div class="row" id="publisherInfoContainer">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
@@ -58,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9" id="rightEmailContainer">
+    <div class="col-md-8" id="rightEmailContainer">
         @Html.Partial("Custom/SingleEmail")
     </div>
 </div>
@@ -160,27 +156,28 @@
                     {
                         //INIT
                         var rowData =table.row(this).data();
-                        singleEmailHelper.init(rowData,'@Url.Action("GetEmailBody", "Email")', staticEmailContainerHeight);
+                        singleEmailHelper.init(rowData,'@Url.Action("GetEmailBody", "Email")', 'publisherInfoContainer','topNavMenu');
 
                         //STYLE
                         $(".selectedTdItem").removeClass("selectedTdItem");
-                        $("#publisherEmailsContainer").removeClass("col-md-12").addClass("col-md-3");
+                        $("#publisherEmailsContainer").removeClass("col-md-12").addClass("col-md-4");
                         $("#myTableContainer").height($('#myTable').height()+200);
-                        $(this).parent("tr").addClass('selectedTdItem');
+                        var parentTr =$(this).parent("tr");
+                        parentTr.addClass('selectedTdItem');
                         $(".dataTables_filter .form-control").addClass('full-width-important');
 
                         //FOCUS
-                        if(!Utils.isElementInView(this)){
-                            var rowpos = $(this).offset();
+                        if(!Utils.isElementInView(parentTr)){
+                            var rowpos = $(parentTr).offset();
                             $(window).scrollTop(rowpos.top-200);
                         }
                     }
                 });
             }
             $("#backToEmailsView").click(function(){
-                var selectedRow = $(".selectedTdItem").parent("tr");
+                var selectedRow = $(".selectedTdItem");
 
-                $("#publisherEmailsContainer").removeClass("col-md-3").addClass("col-md-12");
+                $("#publisherEmailsContainer").removeClass("col-md-4").addClass("col-md-12");
                 $(".dataTables_filter .form-control").removeClass('full-width-important');
 
                 singleEmailHelper.hide();
@@ -210,7 +207,6 @@
             }
 
             $('div.dataTables_filter input').addClass('form-control');
-            var staticEmailContainerHeight = $(window).height() - $(".top_nav").height() - 20;
             $("#myTable").css({'width':'100%'});
         });
     </script>

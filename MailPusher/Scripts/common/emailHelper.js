@@ -1,25 +1,27 @@
 ﻿var singleEmailHelper = {
     emailBodyContainerId: "emailBody",
-    singleEmailFilterContainerId:'singleEmailFilterContainer',
-    init: function (email, emailBodyURL, staticHeight) {
+    singleEmailFilterContainerId: 'singleEmailFilterContainer',
+    emailDataTitleId: 'emailDataTitle',
+    emailDataSubjectId:'emailDataSubject',
+    resizeIsListening :false,
+    init: function (email, emailBodyURL, leftContainerId, headerId) {
         var self = this;
         self.updateControls(email);
         $("#emailData").show();
         $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
             $("#" + self.emailBodyContainerId).contents().find("html").html(data);
             $("#emailBody")[0].contentWindow.scrollTo(0, 0);
-            if (!staticHeight) {
+            if (!leftContainerId || !headerId) {
                 self.setBodyHeight(self.emailBodyContainerId, 200);
                 self.updateBodyHeight(self.emailBodyContainerId);
                 setTimeout(function () { self.updateBodyHeight(self.emailBodyContainerId); }, 1000);
             } else {
-                var newHeight = staticHeight - $("#emailDataTitle").height() - $("#emailDataSubject").height() - 120;
-                if ($("#" + self.emailBodyContainerId).height() != newHeight) {
-                    self.setBodyHeight(self.emailBodyContainerId, newHeight);
-                    var offset = $("#emailData").offset();
-                    var offsetTop = offset.top > $(".nav.navbar-nav").height() + 12 ? offset.top : $(".nav.navbar-nav").height() + 12;
-                    var width = $("#emailData").width();
-                    $("#emailData").css({ 'position': 'fixed', 'top': offsetTop, 'left': offset.left, 'width': width });
+                self.changeStaticPosition(leftContainerId, headerId);
+                if (!self.resizeIsListening) {
+                    self.resizeIsListening = true;
+                    $(window).resize(function () {
+                        self.changeStaticPosition(leftContainerId, headerId);
+                    });
                 }
             }
         });
@@ -55,5 +57,16 @@
     },
     showData: function () {
         $(".singleEmailDataContainer").show();
+    },
+    changeStaticPosition: function (leftContainerId, headerId) {
+        var self = this;
+        var headerHeight = $("#" + headerId).height() + 12;
+        var leftContainerWidth = $("#" + leftContainerId).width() + 20;
+
+        var newHeight = $(window).height() - headerHeight - $("#" + self.emailDataTitleId).height() - $("#" + self.emailDataSubjectId).height() - 65;
+        var newWidth = $(window).width() - leftContainerWidth - 10;
+
+        self.setBodyHeight(self.emailBodyContainerId, newHeight);
+        $("#emailData").css({ 'position': 'fixed', 'top': headerHeight, 'left': leftContainerWidth, 'width': newWidth });
     }
 }
