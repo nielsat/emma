@@ -114,7 +114,17 @@
                         data: "receivedGMT",
                         title: "Sent",
                         sortable: true,
-                        searchable: false
+                        searchable: false,
+                        width:260
+                    },
+                    {
+                        name: 'shortReceivedGMT',
+                        data: "shortReceivedGMT",
+                        title: "Sent",
+                        sortable: true,
+                        searchable: false,
+                        width:220,
+                        visible: false,
                     },
                     {
                         name: 'btns',
@@ -160,11 +170,14 @@
 
                         //STYLE
                         $(".selectedTdItem").removeClass("selectedTdItem");
-                        $("#publisherEmailsContainer").removeClass("col-md-12").addClass("col-md-4");
+                        $("#publisherEmailsContainer").removeClass("col-md-12").addClass("col-md-5");
                         $("#myTableContainer").height($('#myTable').height()+200);
                         var parentTr =$(this).parent("tr");
                         parentTr.addClass('selectedTdItem');
                         $(".dataTables_filter .form-control").addClass('full-width-important');
+                        table.column("btns:name").visible(false);
+                        table.column("receivedGMT:name").visible(false);
+                        table.column("shortReceivedGMT:name").visible(true);
 
                         //FOCUS
                         if(!Utils.isElementInView(parentTr)){
@@ -177,8 +190,12 @@
             $("#backToEmailsView").click(function(){
                 var selectedRow = $(".selectedTdItem");
 
-                $("#publisherEmailsContainer").removeClass("col-md-4").addClass("col-md-12");
+                $("#publisherEmailsContainer").removeClass("col-md-5").addClass("col-md-12");
                 $(".dataTables_filter .form-control").removeClass('full-width-important');
+                var table = $('#myTable').DataTable();
+                table.column("btns:name").visible(true);
+                table.column("receivedGMT:name").visible(true);
+                table.column("shortReceivedGMT:name").visible(false);
 
                 singleEmailHelper.hide();
                 if(!Utils.isElementInView(selectedRow)){

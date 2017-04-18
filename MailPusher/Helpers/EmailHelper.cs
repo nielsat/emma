@@ -64,6 +64,7 @@ namespace MailPusher.Helpers
                 ID = email.ID,
                 PublisherID = email.PublisherID,
                 ReceivedGMT = FormatHelper.ConvertDateToString(email.ReceivedGMT),
+                ShortReceivedGMT = FormatHelper.ConvertDateToShortFullDateString(email.ReceivedGMT),
                 SenderAddress = email.SenderAddress,
                 SenderName = email.SenderName,
                 SubjectLine = email.SubjectLine,

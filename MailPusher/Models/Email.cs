@@ -11,6 +11,7 @@ namespace MailPusher.Models
         public int PublisherID { get; set; }
         public string SubjectLine { get; set; }
         public string ReceivedGMT { get; set; }
+        public string ShortReceivedGMT { get; set; }
         public string SenderName { get; set; }
         public string SenderAddress { get; set; }
         public string Copy { get; set; }

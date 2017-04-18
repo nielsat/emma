@@ -29,10 +29,10 @@ namespace MailPusher.Controllers
             {
                 if (column.Sort != null)
                 {
-                    if (column.Field == "receivedGMT"|| column.Field == "subjectLine")
+                    if (column.Field == "receivedGMT"|| column.Field == "subjectLine"||column.Field == "shortReceivedGMT")
                     {
                         sorting.Add(new SortColumn() {
-                            SortColumnName = column.Field == "receivedGMT"? SortColumnName.ReceivedGMT:SortColumnName.SubjectLine,
+                            SortColumnName = column.Field == "receivedGMT"|| column.Field == "shortReceivedGMT" ? SortColumnName.ReceivedGMT:SortColumnName.SubjectLine,
                             SortingOrder = column.Sort.Direction == SortDirection.Ascending ? SortingOrder.Ascending : SortingOrder.Descending
                         });
                     }
