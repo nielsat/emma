@@ -31,5 +31,7 @@ namespace MailPusher.Repository.Models
         public string UpdaterId { get; set; }
         public virtual AppUser Updater { get; set; }
         public DateTime? StatusChanged { get; set; }
+        public string CountryCompanyCode { get; set; }
+        public int AmountEmployees { get; set; }
     }
 }
