@@ -53,13 +53,15 @@ var notifyWrapper = {
                        {
                            type: 'danger',
                            placement: { align: 'center' },
-                           z_index: 1100
+                           z_index: 1100,
+                           delay: 0,
                        });
     },
     success: function (msg) {
         $.notify(msg,
                         {
                             type: 'success',
+                            z_index: 1100,
                             placement: { align: 'center' }
                         });
     }
