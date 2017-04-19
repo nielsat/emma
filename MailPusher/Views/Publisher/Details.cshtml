@@ -61,6 +61,7 @@
 
 @section Scripts{
     <script type="text/javascript">
+        var emailWasNotClicked = true;
         $(document).ready(function () {
             $('#myTable').dataTable({
                 serverSide: true,
@@ -145,6 +146,11 @@
             $('#myTable').on('draw.dt', function (e, settings) {
                 initButtons();
                 changeGridStyle(settings);
+                if(emailWasNotClicked&&$("#myTable tr").length>1)
+                {
+                    $($("#myTable tr")[1]).find("td")[0].click();
+                    emailWasNotClicked=false;
+                };
             });
 
             function changeGridStyle(settings)
@@ -188,20 +194,7 @@
                 });
             }
             $("#backToEmailsView").click(function(){
-                var selectedRow = $(".selectedTdItem");
-
-                $("#publisherEmailsContainer").removeClass("col-md-5").addClass("col-md-12");
-                $(".dataTables_filter .form-control").removeClass('full-width-important');
-                var table = $('#myTable').DataTable();
-                table.column("btns:name").visible(true);
-                table.column("receivedGMT:name").visible(true);
-                table.column("shortReceivedGMT:name").visible(false);
-
-                singleEmailHelper.hide();
-                if(!Utils.isElementInView(selectedRow)){
-                    var rowpos = selectedRow.offset();
-                    $(window).scrollTop(rowpos.top-200);
-                }
+                window.location.href = "@Url.Action("Index","Publisher")";
             });
 
             function addCustomFilters()
