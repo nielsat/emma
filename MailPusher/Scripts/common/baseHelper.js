@@ -49,12 +49,16 @@ var Utils = {
 
 var notifyWrapper = {
     error: function (msg) {
+        $.notifyClose();
         $.notify(msg,
                        {
                            type: 'danger',
                            placement: { align: 'center' },
                            z_index: 1100,
                            delay: 0,
+                           offset: {
+                               y:69
+                           }
                        });
     },
     success: function (msg) {
