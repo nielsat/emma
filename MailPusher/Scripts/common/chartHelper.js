@@ -27,7 +27,7 @@
                 height: 500,
                 pointSize: 10,
                 dataOpacity: 1,
-                vAxis: { minValue: 0, maxValue: 100 },
+                vAxis: { minValue: 0, maxValue: 20 },
             };
             var materialChart = new google.visualization.LineChart(chartDiv);
             materialChart.draw(data, options);

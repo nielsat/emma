@@ -234,16 +234,30 @@ namespace MailPusher.Repository.Repositories
                 result.TotalSubscriptions = context.Publishers.Where(x => (x.Status & (PublisherStatus.Confirmed | PublisherStatus.Subscribed)) > 0).Count();
 
                 DateRange lastMonthRange = DateRangeHelper.GetLastMonth();
-                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(x => x.StatusChanged!=null && x.StatusChanged >= lastMonthRange.Start.Date && x.StatusChanged <= lastMonthRange.End.Date && x.Status == PublisherStatus.Confirmed).Count();
+                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(
+                    x => x.StatusChanged!=null 
+                    && DbFunctions.TruncateTime(x.StatusChanged) >= DbFunctions.TruncateTime(lastMonthRange.Start) 
+                    && DbFunctions.TruncateTime(x.StatusChanged) <= DbFunctions.TruncateTime(lastMonthRange.End) 
+                    && x.Status == PublisherStatus.Confirmed).Count();
 
                 DateRange lastWeekRange = DateRangeHelper.GetLastWeek();
-                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(x => x.StatusChanged != null && x.StatusChanged >= lastWeekRange.Start.Date && x.StatusChanged <= lastWeekRange.End.Date && x.Status == PublisherStatus.Confirmed).Count();
+                result.ConfirmedSubscriptionsLastWeek = context.Publishers.Where(x => 
+                    x.StatusChanged != null 
+                    && DbFunctions.TruncateTime(x.StatusChanged) >= DbFunctions.TruncateTime(lastWeekRange.Start)
+                    && DbFunctions.TruncateTime(x.StatusChanged) <= DbFunctions.TruncateTime(lastWeekRange.End)
+                    && x.Status == PublisherStatus.Confirmed).Count();
 
                 DateRange currentMonthRange = DateRangeHelper.GetCurrentMonth();
-                result.ConfirmedSubscriptionsLastMonth = context.Publishers.Where(x => x.StatusChanged != null && x.StatusChanged >= currentMonthRange.Start.Date && x.Status == PublisherStatus.Confirmed).Count();
+                result.ConfirmedSubscriptionsThisMonth = context.Publishers.Where(
+                    x => x.StatusChanged != null 
+                    && DbFunctions.TruncateTime(x.StatusChanged) >= DbFunctions.TruncateTime(currentMonthRange.Start)
+                    && x.Status == PublisherStatus.Confirmed).Count();
 
                 DateRange currentWeekRange = DateRangeHelper.GetCurrentWeek();
-                result.ConfirmedSubscriptionsThisWeek = context.Publishers.Where(x => x.StatusChanged != null && x.StatusChanged >= currentWeekRange.Start.Date && x.Status == PublisherStatus.Confirmed).Count();
+                result.ConfirmedSubscriptionsThisWeek = context.Publishers.Where(
+                    x => x.StatusChanged != null 
+                    && DbFunctions.TruncateTime(x.StatusChanged) >= DbFunctions.TruncateTime(currentWeekRange.Start)
+                    && x.Status == PublisherStatus.Confirmed).Count();
             }
             return result;
         }

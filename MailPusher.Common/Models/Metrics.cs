@@ -18,7 +18,7 @@ namespace MailPusher.Common.Models
         {
             get
             {
-                return 3000 - TotalSubscriptions;
+                return 500 - TotalSubscriptions;
             }
         }
     }
