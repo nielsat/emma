@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="SQLSeeds\NACESeed.sql" />
+    <Content Include="SQL\import_example.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703220552127_InitialCreate.resx">
