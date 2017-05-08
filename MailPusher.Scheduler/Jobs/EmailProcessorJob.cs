@@ -79,12 +79,12 @@ namespace MailPusher.Scheduler.Jobs
         {
             string toName = to.Split('@')[0];
             string[] toNameParts = toName.Split('+');
-            if (toNameParts.Length != 2)
+            if (toNameParts.Length <= 1)
             {
                 throw new Exception("Wrong email To format. Expected - '[from]+[publisherId]@[domain]'");
             }
             int result = 0;
-            if (!int.TryParse(toNameParts[1], out result))
+            if (!int.TryParse(toNameParts[toNameParts.Length-1], out result))
             {
                 throw new Exception(string.Format("Wrong PublisherId - {0} . Expected int value", toNameParts[0]));
             }
@@ -112,10 +112,17 @@ namespace MailPusher.Scheduler.Jobs
             doc.LoadHtml(html);
             foreach (HtmlNode img in doc.DocumentNode.Descendants("img"))
             {
-                string newFileName = GenerateNewImageName();
-                DownloadRemoteImageFile(img.Attributes["src"].Value, 
-                    GenerateFilePath(newFileName,publisherId,settings));
-                img.Attributes["src"].Value = GenerateUrl(newFileName, publisherId, settings);
+                try
+                {
+                    string newFileName = GenerateNewImageName();
+                    DownloadRemoteImageFile(img.Attributes["src"].Value,
+                        GenerateFilePath(newFileName, publisherId, settings));
+                    img.Attributes["src"].Value = GenerateUrl(newFileName, publisherId, settings);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("Cannot change img src to local", ex);
+                }
             }
 
             string result = string.Empty;
