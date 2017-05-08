@@ -27,15 +27,13 @@
             var badResult = data.PublisherID=="0";
             if(badResult)
             {
-                singleEmailHelper.hideData();
+                ChangeEmailDataVisibility(false);
                 var errorMsg = 'No subscriptions in State - @MailPusher.Common.Enums.PublisherStatus.Subscribed.';
                 errorMsg+= !isSpecificPublisherState()?'Try different country':'';
                 notifyWrapper.error(errorMsg);
-                $(".unconfirmedBtns").hide();
             }
             else{
-                singleEmailHelper.showData();
-                $(".unconfirmedBtns").show();
+                ChangeEmailDataVisibility(true);
             }
 
             $("#publisherId").val(data.PublisherID);
@@ -49,10 +47,24 @@
                 {
                     notifyWrapper.success('Successfully changed publisher state to ' + newStatus);
                     if(!isSpecificPublisherState()){
+                        ChangeEmailDataVisibility(false);
                         injectedCountryFilter.countryChanged();
                     };
                 }
             });
+        }
+
+        function ChangeEmailDataVisibility(isVisible)
+        {
+            if(isVisible)
+            {
+                singleEmailHelper.showData();
+                $(".unconfirmedBtns").show();
+            }
+            else{
+                singleEmailHelper.hideData();
+                $(".unconfirmedBtns").hide();
+            };
         }
 
         $(document).ready(function(){
