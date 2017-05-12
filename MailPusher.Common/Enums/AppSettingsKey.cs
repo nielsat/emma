@@ -14,6 +14,7 @@ namespace MailPusher.Common.Enums
         emailStorageBaseAddress,
         emailStorageBaseWebAddress,
         projectRegisterPassword,
-        defaultUserLanguage
+        defaultUserLanguage,
+        hMailServerLogsFolder
     }
 }

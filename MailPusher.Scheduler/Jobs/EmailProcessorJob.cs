@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MailPusher.Scheduler.Jobs
@@ -30,8 +31,8 @@ namespace MailPusher.Scheduler.Jobs
                     try
                     {
                         CDO.Message message = ReadMessage(email);
-
-                        int publisherId = GetPublisherIdFromEmail(message.To);
+                        
+                        int publisherId = GetPublisherIdFromEmail(message);
                         string emailHTML = ChangeImgSrcToLocal(message.HTMLBody, settings, publisherId);
                         repo.AddEmail(new Common.Models.Email()
                         {
@@ -75,18 +76,89 @@ namespace MailPusher.Scheduler.Jobs
             return result;
         }
 
-        protected int GetPublisherIdFromEmail(string to)
+        protected int GetPublisherIdFromEmail(CDO.Message message)
         {
-            string toName = to.Split('@')[0];
-            string[] toNameParts = toName.Split('+');
-            if (toNameParts.Length <= 1)
+            string errorMsg = string.Empty;
+            int result = GetPublisherIdFromEmailString(message.To, out errorMsg);
+            if (result == 0)
             {
-                throw new Exception("Wrong email To format. Expected - '[from]+[publisherId]@[domain]'");
+                result = GetPublisherIdFromLogs(message);
             }
-            int result = 0;
-            if (!int.TryParse(toNameParts[toNameParts.Length-1], out result))
+
+            if (result == 0)
             {
-                throw new Exception(string.Format("Wrong PublisherId - {0} . Expected int value", toNameParts[0]));
+                throw new Exception(errorMsg);
+            }
+
+            return result;
+        }
+
+        protected int GetPublisherIdFromEmailString(string email, out string errorMsg)
+        {
+            errorMsg = string.Empty;
+
+            Regex regex = new Regex(@"\+\d.+\@");
+            MatchCollection matches = regex.Matches(email);
+            int result = 0;
+            if (matches.Count == 1)
+            {
+                string strResult = matches[0].Value.Substring(1, matches[0].Value.Length - 2);
+                if (!int.TryParse(strResult, out result))
+                {
+                    errorMsg = string.Format("Wrong PublisherId - {0} . Expected int value", strResult);
+                }
+            }
+            else
+            {
+                errorMsg = "Wrong email To format. Expected - '[from]+[publisherId]@[domain]', received - " + email;
+            }
+            
+            return result;
+        }
+
+        protected int GetPublisherIdFromLogs(CDO.Message message)
+        {
+            var emailHeaders = GetEmailHeaders(message);
+            var receivedHeader = emailHeaders.Find(x => x.HeaderName == "urn:schemas:mailheader:received");
+            Regex regex = new Regex(@"\[\d+\.\d+\.\d+\.\d+\]");
+            MatchCollection matches = regex.Matches(receivedHeader.HeaderValue);
+
+            if (matches.Count != 1)
+            {
+                return 0;
+            }
+
+            string dateString = string.Format("{0:yyy-MM-dd}", message.ReceivedTime);
+            string receivedFropIp = matches[0].Value.Substring(1, matches[0].Value.Length - 2); 
+            string plusAddressingTemplate = string.Format("\"{0}\"	\"RECEIVED: RCPT TO:<", receivedFropIp);
+            string logFilePath = AppSettingsHelper.GetValueFromAppSettings(Common.Enums.AppSettingsKey.hMailServerLogsFolder);
+            string lofFileName = string.Format("hmailserver_{0}.log", dateString);
+            
+            int result = 0;
+            using (StreamReader file = new StreamReader(Path.Combine(logFilePath, lofFileName)))
+            {
+                string line = string.Empty;
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (line.IndexOf(plusAddressingTemplate) != -1)
+                    {
+                        int lineDateStartIndex = line.IndexOf(dateString);
+                        if (lineDateStartIndex == -1) { continue; }
+
+                        string dateTimeString = line.Substring(lineDateStartIndex, line.Length - lineDateStartIndex);
+                        dateTimeString = dateTimeString.Substring(0, dateTimeString.IndexOf('"'));
+                        DateTime fileReceivedTime = Convert.ToDateTime(dateTimeString);
+
+                        long diff = message.ReceivedTime.Ticks - fileReceivedTime.Ticks;
+                        diff = diff < 0 ? -diff : diff;
+
+                        if (diff < (10000000 * 5))
+                        {
+                            string errorMsg = string.Empty;
+                            result = GetPublisherIdFromEmailString(line, out errorMsg);
+                        }
+                    }
+                }
             }
             return result;
         }
