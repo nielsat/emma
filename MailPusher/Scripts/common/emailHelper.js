@@ -9,8 +9,11 @@
         self.updateControls(email);
         $("#emailData").show();
         $.get(emailBodyURL, { emailId: email.id }).done(function (data) {
+            var iframeParent = $("#" + self.emailBodyContainerId).parent();
+            $("#" + self.emailBodyContainerId).remove();
+            iframeParent.append("<iframe class='col-md-12' id='" + self.emailBodyContainerId + "' frameborder='0'></iframe>");
             $("#" + self.emailBodyContainerId).contents().find("html").html(data);
-            $("#emailBody")[0].contentWindow.scrollTo(0, 0);
+            $("#" + self.emailBodyContainerId)[0].contentWindow.scrollTo(0, 0);
             if (!leftContainerId || !headerId) {
                 self.setBodyHeight(self.emailBodyContainerId, 200);
                 self.updateBodyHeight(self.emailBodyContainerId);
