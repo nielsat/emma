@@ -22,17 +22,17 @@ namespace MailPusher.Repository.Repositories
             return result;
         }
 
-        public int GetTotalFilteredRecords(string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
+        public int GetTotalFilteredRecords(string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             int result = 0;
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
-                result = AddFilters(context, searchCriteria, publisherStatuses, isPotentiallyCancelled).Count();
+                result = AddFilters(context, searchCriteria, publisherStatuses, isPotentiallyCancelled, countries, categories, minEmailAmount).Count();
             }
             return result;
         }
 
-        protected IQueryable<Publisher> AddFilters(MailPusherDBContext context, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
+        protected IQueryable<Publisher> AddFilters(MailPusherDBContext context, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             var query = context.Publishers.Select(x => x);
             if (publisherStatuses != 0)
@@ -48,15 +48,27 @@ namespace MailPusher.Repository.Repositories
                 var date = DateTime.UtcNow.AddDays(-30);
                 query = query.Where(x => x.LastReceivedEmail < date);
             }
+            if (countries != null && countries.Count > 0)
+            {
+                query = query.Where(x => countries.Contains(x.Language));
+            }
+            if (categories != null && categories.Count > 0)
+            {
+                query = query.Where(x => categories.Contains(x.NACEID));
+            }
+            if (minEmailAmount > 0)
+            {
+                query = query.Where(x => context.Emails.Where(y => y.PublisherID == x.ID).Count() >= minEmailAmount);
+            }
             return query;
         }
 
-        public List<Publisher> GetPuglishers(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
+        public List<Publisher> GetPuglishers(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             List<Publisher> result = new List<Publisher>();
             using (MailPusherDBContext context = new MailPusherDBContext())
             {
-                var query = AddFilters(context, searchCriteria,publisherStatuses,isPotentiallyCancelled);
+                var query = AddFilters(context, searchCriteria,publisherStatuses,isPotentiallyCancelled, countries, categories, minEmailAmount);
                 
                 var tmpResult = query.Include(x => x.NACE).OrderBy(x => x.ID).Skip(start).Take(length);
                 result = tmpResult.ToList();

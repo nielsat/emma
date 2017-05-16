@@ -33,9 +33,13 @@
             $('#myTable').dataTable({
                 serverSide: true,
                 ajax: {url:'@Url.Action("Get", "Publisher")',
+                        "type": "POST",
                     data:function ( d ) {
                         d.publisherStatuses = GetPublisherCombinedStatus();
                         d.isPotentiallyCancelled = IsPotentiallyCancelled();
+                        d.countries = GetPublisherCountreis();
+                        d.categories = GetPublisherCategories();
+                        d.minEmailAmount = GetMinEmailAmount();
                     }},
                 columns: [
                     {
@@ -203,13 +207,74 @@
                 return combinedStatus;
             }
 
+            function GetPublisherCountreis()
+            {
+                var countries =[];
+                $.each($('#publisherCountry option:selected'),function(index,value){
+                    countries.push(value.value);
+                });
+                return countries;
+            }
+            function GetPublisherCategories()
+            {
+                var categories =[];
+                $.each($('#publisherCategory option:selected'),function(index,value){
+                    categories.push(value.value);
+                });
+                return categories;
+            }
+
+            function GetMinEmailAmount()
+            {
+                var numberPattern = /\d+/g;
+                var amountVal = $("#publisherMinEmailNumber").val();
+                amountVal = !!amountVal?amountVal:"";
+                var matchedResult = amountVal.match( numberPattern );
+                return !!matchedResult && matchedResult.length==1?amountVal:0;
+            }
+
             function addCustomFilters()
             {
                 if(!!$("#customTableFilter").length)
                 {
                     return;
                 };
-                var select = '<label id="customTableFilter"> Filter publishers on state: <select id="publisherStatus" multiple="multiple">';
+
+                $("#myTable_filter").css("width","100%");
+
+                addPublisherStatusFilter();
+                addCountryFilter();
+                addEmailFilter();
+                addCategoryFilter();
+            }
+
+            function addCategoryFilter(){
+                $.get("@Url.Action("GetPublisherCategories", "Publisher")").done(function(data){
+                    var select = '<label id="customTableFilter"> Filter publishers on category: <select id="publisherCategory" class="multiselect publisherFilterControl" multiple="multiple">';
+                    $.each(data, function( index, value ) {
+                        select+="<option value='"+value.ID+"' >"+value.Description +"</option>";
+                    });
+                    select +="</select></label> &nbsp; &nbsp; &nbsp;";
+                    addFilter(select);
+                });
+            }
+
+            function addEmailFilter()
+            {
+                var input = '<label id="customTableFilter"> Filter publishers by min email amount: <input id="publisherMinEmailNumber" class="form-control publisherFilterControl" style="width:50px;"/></label> &nbsp; &nbsp; &nbsp;';
+                addFilter(input);
+            }
+
+            function addCountryFilter()
+            {
+                var select = '<label id="customTableFilter"> Filter publishers by country: <select id="publisherCountry" class="multiselect publisherFilterControl" multiple="multiple">';
+                select +="</select></label> &nbsp; &nbsp; &nbsp;";
+                addFilter(select);
+                initShortCountrySelect("publisherCountry", null, true);
+            }
+
+            function addPublisherStatusFilter(){
+                var select = '<label id="customTableFilter"> Filter publishers on state: <select id="publisherStatus" class="multiselect publisherFilterControl" multiple="multiple">';
                 var selectedStatuses = getUrlParameter('publisherStatuses');
                 $.each(@Html.Raw(ViewBag.StatusList), function( index, value ) {
                     var selected = '';
@@ -220,13 +285,30 @@
                     select+="<option value='"+value.Item2+"' " + selected + ">"+value.Item1 +"</option>";
                 });
                 select +="</select></label> &nbsp; &nbsp; &nbsp;";
-                $("#myTable_filter").prepend(select);
-                $('#publisherStatus').multiselect();
-                $("#publisherStatus").change(function(){
-                    $('#myTable').DataTable().draw();
-                })
+                addFilter(select);
             }
-            
+
+            function reloadTableData()
+            {
+                $('#myTable').DataTable().draw();
+            }
+
+            var addedPoublisherFiltersCounter = 0;
+
+            function addFilter(filter)
+            {
+                $("#myTable_filter").prepend(filter);
+
+                
+                addedPoublisherFiltersCounter++;
+                if(addedPoublisherFiltersCounter==4){
+                    $('.multiselect').multiselect();
+                    $(".publisherFilterControl").change(function(){
+                        reloadTableData();
+                    });
+                }
+            }
+
 
             $('div.dataTables_filter input').addClass('form-control');
             gridHelper.hidePginationIfOnePage('myTable');

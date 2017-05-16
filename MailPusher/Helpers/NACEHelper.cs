@@ -15,6 +15,12 @@ namespace MailPusher.Helpers
             return Map(repo.GetAllRecords());
         }
 
+        public List<NACE> GetPublisherNaces()
+        {
+            NACERepo repo = new NACERepo();
+            return Map(repo.GetPublisherNaces());
+        }
+
         public List<NACE> Map(List<Repository.Models.NACE> naces)
         {
             List<NACE> result = new List<NACE>();

@@ -27,13 +27,15 @@ namespace MailPusher.Controllers
             return View();
         }
 
-        public ActionResult Get(IDataTablesRequest request, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
+        public ActionResult Get(IDataTablesRequest request, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             PublisherHelper helper = new PublisherHelper();
             
-            var filteredData = helper.GetPublishersWithStats(request.Start, request.Length, request.Search.Value, publisherStatuses, isPotentiallyCancelled);
+            var filteredData = helper.GetPublishersWithStats(request.Start, request.Length, request.Search.Value, publisherStatuses, isPotentiallyCancelled, countries, categories, minEmailAmount);
 
-            var response = DataTablesResponse.Create(request, helper.GetTotalRecords(), helper.GetTotalFilteredRecords(request.Search.Value, publisherStatuses, isPotentiallyCancelled), filteredData);
+            var response = DataTablesResponse.Create(request, helper.GetTotalRecords(), 
+                helper.GetTotalFilteredRecords(request.Search.Value, publisherStatuses, isPotentiallyCancelled, countries, categories, minEmailAmount), 
+                filteredData);
 
             // Easier way is to return a new 'DataTablesJsonResult', which will automatically convert your
             // response to a json-compatible content, so DataTables can read it when received.
@@ -137,6 +139,13 @@ namespace MailPusher.Controllers
         public ActionResult GetConfirmedSubscriptionsChartData() {
             PublisherHelper helper = new PublisherHelper();
             return Json(helper.GetConfirmedSubscriptionsChart(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetPublisherCategories()
+        {
+            NACEHelper helper = new NACEHelper();
+            return Json(helper.GetPublisherNaces(), JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -17,22 +17,22 @@ namespace MailPusher.Helpers
             return repo.GetTotalRecords();
         }
 
-        public int GetTotalFilteredRecords(string searchCriteria, PublisherStatus statuses, bool isPotentiallyCancelled)
+        public int GetTotalFilteredRecords(string searchCriteria, PublisherStatus statuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             PublisherRepo repo = new PublisherRepo();
-            return repo.GetTotalFilteredRecords(searchCriteria, statuses, isPotentiallyCancelled);
+            return repo.GetTotalFilteredRecords(searchCriteria, statuses, isPotentiallyCancelled, countries, categories, minEmailAmount);
         }
 
         public List<Publisher> GetPublishers(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
         {
             PublisherRepo repo = new PublisherRepo();
-            return Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled));
+            return Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled, null, null, 0));
         }
 
-        public List<Publisher> GetPublishersWithStats(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled)
+        public List<Publisher> GetPublishersWithStats(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             PublisherRepo repo = new PublisherRepo();
-            List<Publisher> publishers = Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled));
+            List<Publisher> publishers = Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled, countries, categories, minEmailAmount));
             var publishersStats = repo.GetStats(publishers.Select(x => x.ID).ToList());
             foreach (var publisher in publishers)
             {

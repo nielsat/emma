@@ -14,9 +14,13 @@ function initCountryTypeahead(typeaheadId, selectedCountryCode)
     mySelect.val(countryList[selectedCountryCode]);
 };
 
-function initShortCountrySelect(selectId, selectedCountryCode) {
+function initShortCountrySelect(selectId, selectedCountryCode, noSelected) {
     var mySelect = $('#' + selectId);
     var typeAheadData = [];
+    if (noSelected)
+    {
+        selectedCountryCode = 'null';
+    }
     $.each(shortCountryList, function (val, text) {
         if (val == selectedCountryCode) {
             mySelect.append($("<option></option>")
