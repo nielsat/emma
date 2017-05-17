@@ -1,13 +1,13 @@
 ﻿var gridHelper = {
-    updateContainerHeight: function (containerId, gridId, minHeight) {
-        var newHeight = minHeight + $("#" + gridId).height();
-        $("#" + containerId).height(newHeight);
+    updateContainerHeight: function (containerSelector, gridSelector, minHeight) {
+        var newHeight = minHeight + $(gridSelector).height();
+        $(containerSelector).height(newHeight);
     },
-    changeTdCursorToPointer: function (tableId, exceptionClass) {
-        $("#" + tableId).find('td').css("cursor", "pointer");
-        $("." + exceptionClass).parents('td').css("cursor", "default");
+    changeTdCursorToPointer: function (tableSelector, exceptionSelector) {
+        $(tableSelector).find('td').css("cursor", "pointer");
+        $(exceptionSelector).parents('td').css("cursor", "default");
     },
-    hidePginationIfOnePage: function (tableID, oSettings) {
+    hidePginationIfOnePage: function (tableSelector, oSettings) {
         if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
             $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
         }

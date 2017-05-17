@@ -43,6 +43,9 @@
                             <li id="potentiallyCancelledSubscriptionsMenuItem">
                                 <a href='@(Url.Action("Index", "Publisher") + "?isPotentiallyCancelled=true")'><i class="fa fa-trash"></i> Potentially cancelled subscriptions</a>
                             </li>
+                            <li>
+                                <a href='@Url.Action("Latest", "Email")'><i class="fa fa-clock-o"></i> Latest emails</a>
+                            </li>
                         </ul>
                         @*<div class="nav toggle">
                             <a id="menu_toggle"><i class="fa fa-bars"></i></a>

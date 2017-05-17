@@ -1,43 +1,14 @@
-﻿@model MailPusher.Models.Publisher
-@{
-    ViewBag.Title = Model.Name;
+﻿@{
+    ViewBag.Title = "Latest emails";
 }
 <div class="row">
     <div class="col-md-12" id="publisherEmailsContainer">
-        <div class="row" id="publisherInfoContainer">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Publisher - @Model.Name (ID - @Model.ID)</h2>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>Domain</label><br />
-                            <a href="@Model.Domain" target="_blank"> @Model.Domain</a>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Language</label><br />
-                            @Model.Language
-                        </div>
-                        <div class="col-md-3">
-                            <label>Category</label><br />
-                            @Model.Category
-                        </div>
-                        <div class="col-md-3">
-                            <label>State</label><br />
-                            @Model.FormatedStatus
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row" id="publisherEmails">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>
-                            @Model.Name emails
+                            Latest emails
                         </h2>
                         <div class="clearfix"></div>
                     </div>
@@ -67,21 +38,12 @@
             emailListHelper.settings={
                 gridSelector: '#myTable',
                 gridContainerSelector:'#myTableContainer',
-                gridUrl: '@Url.Action("Get", "Email")',
+                gridUrl: '@Url.Action("GetLatest", "Email")',
                 permalinkEmalUrl: '@Url.Action("Index", "Email")',
                 getEmailBodyUrl:'@Url.Action("GetEmailBody", "Email")',
-                gridAddCustomGetParams: function (d) {
-                    d.publisherID =@Model.ID;
-                    if(!!$("#emailMinDate").length && !!$("#emailMaxDate").length){
-                        d.from = $("#emailMinDate").data('datepicker').getFormattedDate('mm-dd-yyyy');
-                        d.to = $("#emailMaxDate").data('datepicker').getFormattedDate('mm-dd-yyyy');
-                    }else{
-                        d.from=null;
-                        d.to=null;
-                    }
-                },
-                showPublisherColumn: false,
-                publisherInfoContainerId: 'publisherInfoContainer',
+                gridAddCustomGetParams: function (d) {},
+                showPublisherColumn: true,
+                publisherInfoContainerId: 'publisherEmails',
                 publisherEmailsContainerSelector: '#publisherEmailsContainer',
                 emailMinDateId: 'emailMinDate',
                 emailMaxDateId: 'emailMaxDate',

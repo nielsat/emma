@@ -98,7 +98,11 @@ namespace MailPusher.Repository.Repositories
         }
 
         protected IQueryable<Email> AddFilters(MailPusherDBContext context, string searchCriteria, int publisherID, DateTime? from, DateTime? to, List<Common.Models.SortColumn> sorting=null) {
-            var query = context.Emails.Where(x => x.PublisherID == publisherID);
+            var query = context.Emails.AsQueryable();
+            if (publisherID > 0)
+            {
+                query = query.Where(x => x.PublisherID == publisherID);
+            }
             if (!string.IsNullOrEmpty(searchCriteria))
             {
                 query = query.Where(x => x.SubjectLine.Contains(searchCriteria));
@@ -133,7 +137,12 @@ namespace MailPusher.Repository.Repositories
             int result = 0;
             using (var context = new MailPusherDBContext())
             {
-                result = context.Emails.Where(x=>x.PublisherID==publisherID).Count();
+                var query = context.Emails.AsQueryable();
+                if (publisherID > 0)
+                {
+                    query = query.Where(x => x.PublisherID == publisherID);
+                }
+                result = context.Emails.Count();
             }
             return result;
         }

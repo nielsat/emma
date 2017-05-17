@@ -140,9 +140,9 @@
                     ||$(".confirmSubscribtionBtn.hidden").length!=$(".confirmSubscribtionBtn").length){
                     $(".btnTD").parents('td').css("width","250px");
                 }
-                gridHelper.updateContainerHeight('myTableContainer','myTable',200);
-                gridHelper.changeTdCursorToPointer('myTable','btnTD');
-                gridHelper.hidePginationIfOnePage('myTable',settings);
+                gridHelper.updateContainerHeight('#myTableContainer','#myTable',200);
+                gridHelper.changeTdCursorToPointer('#myTable','.btnTD');
+                gridHelper.hidePginationIfOnePage('#myTable',settings);
             }
 
             function showButtonsBasedOnState()
@@ -311,7 +311,7 @@
 
 
             $('div.dataTables_filter input').addClass('form-control');
-            gridHelper.hidePginationIfOnePage('myTable');
+            gridHelper.hidePginationIfOnePage('#myTable');
         });
     </script>
     }

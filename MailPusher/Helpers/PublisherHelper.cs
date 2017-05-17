@@ -6,6 +6,7 @@ using MailPusher.Models;
 using MailPusher.Repository.Repositories;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace MailPusher.Helpers
 {
@@ -27,6 +28,21 @@ namespace MailPusher.Helpers
         {
             PublisherRepo repo = new PublisherRepo();
             return Map(repo.GetPuglishers(start, length, searchCriteria, publisherStatuses, isPotentiallyCancelled, null, null, 0));
+        }
+
+        internal List<Publisher> GetPublishersName(List<int> publisherIds)
+        {
+            List<Publisher> result = new List<Publisher>();
+            PublisherRepo repo = new PublisherRepo();
+            foreach (var publisher in repo.GetPuglishers(publisherIds))
+            {
+                result.Add(new Publisher()
+                {
+                    ID = publisher.ID,
+                    Name = publisher.Name
+                });
+            }
+            return result;
         }
 
         public List<Publisher> GetPublishersWithStats(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)

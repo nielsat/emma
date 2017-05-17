@@ -9,6 +9,7 @@ namespace MailPusher.Models
     {
         public int ID { get; set; }
         public int PublisherID { get; set; }
+        public string PublisherName { get; set; }
         public string SubjectLine { get; set; }
         public string ReceivedGMT { get; set; }
         public string ShortReceivedGMT { get; set; }

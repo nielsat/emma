@@ -647,6 +647,7 @@
     <Content Include="Views\Shared\Custom\PublisherEmailFilter.cshtml" />
     <Content Include="Views\Publisher\Edit.cshtml" />
     <Content Include="Views\Email\Index.cshtml" />
+    <Content Include="Views\Email\Latest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -24,20 +24,8 @@ namespace MailPusher.Controllers
 
         public ActionResult Get(IDataTablesRequest request, int publisherID, string from, string to)
         {
-            List<SortColumn> sorting = new List<SortColumn>();
-            foreach (var column in request.Columns)
-            {
-                if (column.Sort != null)
-                {
-                    if (column.Field == "receivedGMT"|| column.Field == "subjectLine"||column.Field == "shortReceivedGMT")
-                    {
-                        sorting.Add(new SortColumn() {
-                            SortColumnName = column.Field == "receivedGMT"|| column.Field == "shortReceivedGMT" ? SortColumnName.ReceivedGMT:SortColumnName.SubjectLine,
-                            SortingOrder = column.Sort.Direction == SortDirection.Ascending ? SortingOrder.Ascending : SortingOrder.Descending
-                        });
-                    }
-                }
-            }
+            List<SortColumn> sorting = GetSortColumns(request);
+            
             EmailHelper helper = new EmailHelper();
 
             var filteredData = helper.GetEmails(request.Start, request.Length, request.Search.Value, publisherID, from, to, sorting);
@@ -48,6 +36,26 @@ namespace MailPusher.Controllers
                 filteredData);
 
             return new DataTablesJsonResult(response, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<SortColumn> GetSortColumns(IDataTablesRequest request)
+        {
+            List<SortColumn> sorting = new List<SortColumn>();
+            foreach (var column in request.Columns)
+            {
+                if (column.Sort != null)
+                {
+                    if (column.Field == "receivedGMT" || column.Field == "subjectLine" || column.Field == "shortReceivedGMT")
+                    {
+                        sorting.Add(new SortColumn()
+                        {
+                            SortColumnName = column.Field == "receivedGMT" || column.Field == "shortReceivedGMT" ? SortColumnName.ReceivedGMT : SortColumnName.SubjectLine,
+                            SortingOrder = column.Sort.Direction == SortDirection.Ascending ? SortingOrder.Ascending : SortingOrder.Descending
+                        });
+                    }
+                }
+            }
+            return sorting;
         }
 
         public ActionResult GetEmailBody(int emailID)
@@ -82,6 +90,26 @@ namespace MailPusher.Controllers
         {
             EmailHelper helper = new EmailHelper();
             return Json(helper.GetTotalRecords(publisherId), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Latest()
+        {
+            return View();
+        }
+
+        public ActionResult GetLatest(IDataTablesRequest request)
+        {
+            List<SortColumn> sorting = GetSortColumns(request);
+            EmailHelper helper = new EmailHelper();
+
+            var filteredData = helper.GetEmails(request.Start, request.Length, request.Search.Value, 0, string.Empty, string.Empty, sorting, true);
+
+            var response = DataTablesResponse.Create(request,
+                helper.GetTotalRecords(0),
+                helper.GetTotalFilteredRecords(request.Search.Value, 0, string.Empty, string.Empty),
+                filteredData);
+
+            return new DataTablesJsonResult(response, JsonRequestBehavior.AllowGet);
         }
     }
 }

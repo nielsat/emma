@@ -16,10 +16,25 @@ namespace MailPusher.Helpers
             EmailRepo repo = new EmailRepo();
             return Map(repo.Get(emailID));
         }
-        public List<Email> GetEmails(int start, int length, string searchCriteria, int publisherID, string from, string to, List<Common.Models.SortColumn> sorting)
+        public List<Email> GetEmails(int start, int length, string searchCriteria, int publisherID, string from, string to, List<Common.Models.SortColumn> sorting, bool addPublisherName = false)
         {
             EmailRepo repo = new EmailRepo();
-            return Map(repo.GetPublisherEmails(start, length, searchCriteria, publisherID, GetDate(from), GetDate(to), sorting));
+            var result = Map(repo.GetPublisherEmails(start, length, searchCriteria, publisherID, GetDate(from), GetDate(to), sorting));
+            if (addPublisherName)
+            {
+                var publisherIds = result.Select(x => x.PublisherID).ToList();
+                PublisherHelper helper = new PublisherHelper();
+                var publishers = helper.GetPublishersName(publisherIds);
+                foreach (var item in result)
+                {
+                    var emailPublisher = publishers.FirstOrDefault(x => x.ID == item.PublisherID);
+                    if (emailPublisher != null)
+                    {
+                        item.PublisherName = emailPublisher.Name;
+                    }
+                }
+            }
+            return result;
         }
         protected DateTime? GetDate(string date)
         {

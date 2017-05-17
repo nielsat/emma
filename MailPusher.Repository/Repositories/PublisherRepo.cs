@@ -63,6 +63,16 @@ namespace MailPusher.Repository.Repositories
             return query;
         }
 
+        public List<Publisher> GetPuglishers(List<int> publisherIds)
+        {
+            List<Publisher> result = new List<Publisher>();
+            using (MailPusherDBContext context = new MailPusherDBContext())
+            {
+                result = context.Publishers.Where(x => publisherIds.Contains(x.ID)).ToList();
+            }
+            return result;
+        }
+
         public List<Publisher> GetPuglishers(int start, int length, string searchCriteria, PublisherStatus publisherStatuses, bool isPotentiallyCancelled, List<string> countries, List<int> categories, int minEmailAmount)
         {
             List<Publisher> result = new List<Publisher>();
