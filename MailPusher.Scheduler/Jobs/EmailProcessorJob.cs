@@ -97,12 +97,12 @@ namespace MailPusher.Scheduler.Jobs
         {
             errorMsg = string.Empty;
 
-            Regex regex = new Regex(@"\+\d.+\@");
+            Regex regex = new Regex(@"\+\d+\@");
             MatchCollection matches = regex.Matches(email);
             int result = 0;
-            if (matches.Count == 1)
+            if (matches.Count >= 0)
             {
-                string strResult = matches[0].Value.Substring(1, matches[0].Value.Length - 2);
+                string strResult = matches[matches.Count-1].Value.Substring(1, matches[matches.Count-1].Value.Length - 2);
                 if (!int.TryParse(strResult, out result))
                 {
                     errorMsg = string.Format("Wrong PublisherId - {0} . Expected int value", strResult);
