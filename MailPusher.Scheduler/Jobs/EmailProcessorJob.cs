@@ -100,7 +100,7 @@ namespace MailPusher.Scheduler.Jobs
             Regex regex = new Regex(@"\+\d+\@");
             MatchCollection matches = regex.Matches(email);
             int result = 0;
-            if (matches.Count >= 0)
+            if (matches.Count > 0)
             {
                 string strResult = matches[matches.Count-1].Value.Substring(1, matches[matches.Count-1].Value.Length - 2);
                 if (!int.TryParse(strResult, out result))
